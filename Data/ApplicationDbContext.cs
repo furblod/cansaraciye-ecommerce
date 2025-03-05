@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using cansaraciye_ecommerce.Models;
 
 
-namespace ECommerce.Data
+namespace cansaraciye_ecommerce.Data
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {

@@ -1,0 +1,18 @@
+@model cansaraciye_ecommerce.Models.Category
+
+@{
+    ViewData["Title"] = "Kategori Düzenle";
+}
+
+<h2>Kategori Düzenle</h2>
+
+<form asp-controller="Admin" asp-action="EditCategory" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label>Kategori Adı</label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>
+
+<a class="btn btn-secondary" asp-controller="Admin" asp-action="CategoryList">Geri</a>

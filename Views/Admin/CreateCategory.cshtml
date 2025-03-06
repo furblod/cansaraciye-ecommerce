@@ -1,0 +1,18 @@
+@model cansaraciye_ecommerce.Models.Category
+
+@{
+    ViewData["Title"] = "Yeni Kategori Ekle";
+}
+
+<h2>Yeni Kategori Ekle</h2>
+
+<form asp-controller="Admin" asp-action="CreateCategory" method="post">
+    <div class="form-group">
+        <label>Kategori Adı</label>
+        <input asp-for="Name" class="form-control" required />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">Kaydet</button>
+</form>
+
+<a class="btn btn-secondary" asp-controller="Admin" asp-action="CategoryList">Geri</a>

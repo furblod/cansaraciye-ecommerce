@@ -1,0 +1,32 @@
+@model IEnumerable<cansaraciye_ecommerce.Models.Category>
+
+@{
+    ViewData["Title"] = "Kategori Listesi";
+}
+
+<h2>Kategoriler</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Kategori Adı</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.Name</td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="Admin" asp-action="EditCategory" asp-route-id="@category.Id">Düzenle</a>
+                    <a class="btn btn-danger" asp-controller="Admin" asp-action="DeleteCategory" asp-route-id="@category.Id" onclick="return confirm('Silmek istediğinize emin misiniz?');">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-success" asp-controller="Admin" asp-action="CreateCategory">Yeni Kategori Ekle</a>

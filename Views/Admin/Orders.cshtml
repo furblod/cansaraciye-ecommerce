@@ -1,0 +1,27 @@
+@model List<cansaraciye_ecommerce.Models.Order>
+
+<h2>Siparişler</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Kullanıcı</th>
+            <th>Adres</th>
+            <th>Şehir</th>
+            <th>Tarih</th>
+            <th>Detay</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.UserId</td>
+                <td>@order.Address</td>
+                <td>@order.City</td>
+                <td>@order.OrderDate</td>
+                <td><a href="#">Detay</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,30 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ürün</th>
+            <th>Adet</th>
+            <th>Fiyat</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@(item.Product.Price* item.Quantity)</td>
+                <td>
+                    <form asp-action="RemoveFromCart" asp-route-cartItemId="@item.Id" method="post">
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Siparişi Tamamla Butonu -->
+<form asp-action="Checkout" method="get">
+    <button type="submit" class="btn btn-success">Siparişi Tamamla</button>
+</form>

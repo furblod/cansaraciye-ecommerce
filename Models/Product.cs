@@ -8,9 +8,9 @@ namespace cansaraciye_ecommerce.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Ürün adı gereklidir.")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required(ErrorMessage = "Fiyat gereklidir.")]
         public decimal Price { get; set; }
@@ -18,7 +18,7 @@ namespace cansaraciye_ecommerce.Models
         [Required(ErrorMessage = "Stok bilgisi gereklidir.")]
         public int Stock { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         [Required(ErrorMessage = "Kategori seçilmelidir.")]
         [ForeignKey("Category")]

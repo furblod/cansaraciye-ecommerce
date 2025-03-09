@@ -1,0 +1,27 @@
+@model cansaraciye_ecommerce.Models.Order
+
+<h2>Sipariş Ver</h2>
+
+<form asp-controller="ShoppingCart" asp-action="PlaceOrder" method="post">
+    <div class="mb-3">
+        <label>Ad Soyad</label>
+        <input type="text" class="form-control" asp-for="FullName" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Adres</label>
+        <input type="text" class="form-control" asp-for="Address" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Şehir</label>
+        <input type="text" class="form-control" asp-for="City" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Telefon</label>
+        <input type="text" class="form-control" asp-for="PhoneNumber" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Siparişi Tamamla</button>
+</form>

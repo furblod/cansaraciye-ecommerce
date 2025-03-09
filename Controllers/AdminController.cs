@@ -211,5 +211,12 @@ namespace cansaraciye_ecommerce.Controllers
             }
             return RedirectToAction("ProductList");
         }
+
+        public IActionResult Orders()
+        {
+            var orders = _context.Orders.Include(o => o.OrderItems).ThenInclude(oi => oi.Product).ToList();
+            return View(orders);
+        }
+
     }
 }

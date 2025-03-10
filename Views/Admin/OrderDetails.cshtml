@@ -1,0 +1,49 @@
+@model cansaraciye_ecommerce.Models.Order
+
+<h2>Sipariş Detayı</h2>
+
+<p><strong>Sipariş No:</strong> @Model.Id</p>
+<p><strong>Kullanıcı Adı:</strong> @Model.FullName</p>
+<p><strong>Kullanıcı ID:</strong> @Model.UserId</p>
+<p><strong>Tarih:</strong> @Model.OrderDate.ToShortDateString()</p>
+<p><strong>Adres:</strong> @Model.Address</p>
+<form method="post" asp-action="UpdateOrderStatus" asp-controller="Admin">
+    <input type="hidden" name="orderId" value="@Model.Id" />
+
+    <label><strong>Durumu Güncelle:</strong></label>
+    <select name="status" class="form-control">
+        <option value="Sipariş Alındı" selected="@(Model.Status == "Sipariş Alındı" ? "selected" : null)">Sipariş Alındı
+        </option>
+        <option value="Kargoya Veriliyor" selected="@(Model.Status == "Kargoya Veriliyor" ? "selected" : null)">Kargoya
+            Veriliyor</option>
+        <option value="Kargoya Verildi" selected="@(Model.Status == "Kargoya Verildi" ? "selected" : null)">Kargoya
+            Verildi</option>
+        <option value="Tamamlandı" selected="@(Model.Status == "Tamamlandı" ? "selected" : null)">Tamamlandı</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-2">Durumu Güncelle</button>
+</form>
+
+
+<h3>Ürünler:</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ürün</th>
+            <th>Adet</th>
+            <th>Fiyat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.TotalPrice ₺</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Orders" class="btn btn-secondary">Geri Dön</a>

@@ -214,9 +214,59 @@ namespace cansaraciye_ecommerce.Controllers
 
         public IActionResult Orders()
         {
-            var orders = _context.Orders.Include(o => o.OrderItems).ThenInclude(oi => oi.Product).ToList();
+            var orders = _context.Orders
+                                 .Include(o => o.OrderItems)
+                                 .ThenInclude(oi => oi.Product)
+                                 .ToList();
+
             return View(orders);
         }
 
+        public IActionResult OrderDetails(int id)
+        {
+            var order = _context.Orders
+                                .Include(o => o.OrderItems)
+                                .ThenInclude(oi => oi.Product)
+                                .FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteOrder(int id)
+        {
+            var order = _context.Orders.Include(o => o.OrderItems).FirstOrDefault(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            _context.OrderItems.RemoveRange(order.OrderItems); // Sipariş ürünlerini sil
+            _context.Orders.Remove(order); // Siparişi sil
+            _context.SaveChanges();
+
+            return RedirectToAction("Orders");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOrderStatus(int orderId, string status)
+        {
+            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.Status = status;
+            _context.SaveChanges();
+
+            return RedirectToAction("OrderDetails", new { id = orderId });
+        }
     }
 }

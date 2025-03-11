@@ -1,31 +1,67 @@
 ﻿@model List<cansaraciye_ecommerce.Models.Product>
-
-<h2>Ürünler</h2>
-
-@if (!Model.Any())
-{
-    <p>Henüz ürün eklenmemiş.</p>
+@{
+    ViewData["Title"] = "Ürünler";
 }
-else
-{
-    <div class="row">
-        @foreach (var product in Model)
-        {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text">@product.Description</p>
-                        <p class="card-text"><strong>Fiyat: </strong>@product.Price.ToString("C")</p>
-                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@product.Id"
-                            class="btn btn-primary">Detayları Gör</a>
-                        <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId="@product.Id"
-                            class="btn btn-success">Sepete Ekle</a>
 
-                    </div>
+<h2 class="text-center mb-4">Ürünler</h2>
+
+<!-- 🔎 Arama ve Filtreleme -->
+<form method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" name="searchTerm" class="form-control" placeholder="Ürün Ara..."
+                value="@Context.Request.Query["searchTerm"]" />
+        </div>
+
+        <div class="col-md-3">
+            <select name="categoryId" class="form-control">
+                <option value="">Tüm Kategoriler</option>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Id"
+                        selected="@(Context.Request.Query["categoryId"] == category.Id.ToString())">@category.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="sortOrder" class="form-control">
+                <option value="">Sırala</option>
+                <option value="price_asc" selected="@(Context.Request.Query["sortOrder"] == "price_asc")">Fiyat:
+                    Düşükten Yükseğe</option>
+                <option value="price_desc" selected="@(Context.Request.Query["sortOrder"] == "price_desc")">Fiyat:
+                    Yüksekten Düşüğe</option>
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+        </div>
+    </div>
+</form>
+
+<!-- 📦 Ürünleri Bootstrap Card ile Listeleme -->
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name"
+                    style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text text-muted">@product.Category?.Name</p>
+                    <p class="card-text fw-bold">@product.Price.ToString("C")</p>
+                    <a href="@Url.Action("Details", "Home", new { id = product.Id })" class="btn btn-info w-100">Detayları
+                        Gör</a>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart"
+                        asp-route-productId="@product.Id">
+                        <button type="submit" class="btn btn-success w-100">Sepete Ekle</button>
+                    </form>
                 </div>
             </div>
-        }
-    </div>
-}
+        </div>
+    }
+</div>

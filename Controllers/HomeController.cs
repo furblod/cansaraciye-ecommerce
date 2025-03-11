@@ -17,13 +17,39 @@ public class HomeController : Controller
         _logger = logger;
         _context = context;
     }
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string searchTerm, int? categoryId, string sortOrder)
     {
-        var categories = await _context.Categories.ToListAsync(); // Kategorileri çek
-        var products = await _context.Products.Include(p => p.Category).ToListAsync(); // Ürünleri çek
+        var products = _context.Products.Include(p => p.Category).AsQueryable();
 
-        ViewData["Categories"] = categories; // Kategorileri View'a gönder
-        return View(products); // Ürünleri View'a gönder
+        // 🔎 **Arama Çubuğu İşlemi**
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            products = products.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
+        }
+
+        // 🏷 **Kategoriye Göre Filtreleme**
+        if (categoryId.HasValue)
+        {
+            products = products.Where(p => p.CategoryId == categoryId);
+        }
+
+        // 💰 **Fiyata Göre Sıralama**
+        switch (sortOrder)
+        {
+            case "price_asc":
+                products = products.OrderBy(p => p.Price);
+                break;
+            case "price_desc":
+                products = products.OrderByDescending(p => p.Price);
+                break;
+            default:
+                break;
+        }
+
+        var categories = await _context.Categories.ToListAsync();
+        ViewBag.Categories = categories;
+
+        return View(await products.ToListAsync());
     }
 
     public async Task<IActionResult> ProductDetails(int id)

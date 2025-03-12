@@ -40,6 +40,13 @@
                                 🛒 Sepetim <span class="badge bg-danger">@ViewBag.CartItemCount</span>
                             </a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Orders" asp-controller="Order">Siparişlerim</a>
+                            </li>
+                        }
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

@@ -1,0 +1,32 @@
+@model cansaraciye_ecommerce.Models.Order
+
+<h2>Sipariş Detayları</h2>
+
+<p><strong>Sipariş ID:</strong> @Model.Id</p>
+<p><strong>Tarih:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+<p><strong>Durum:</strong> @Model.Status</p>
+
+<h3>Ürünler</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ürün</th>
+            <th>Adet</th>
+            <th>Fiyat</th>
+            <th>Toplam</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Product.Price ₺</td>
+                <td>@item.TotalPrice ₺</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Orders" asp-controller="Order" class="btn btn-primary">Siparişlerime Geri Dön</a>

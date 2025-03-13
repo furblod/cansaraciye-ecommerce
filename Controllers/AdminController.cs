@@ -111,35 +111,21 @@ namespace cansaraciye_ecommerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public IActionResult CreateProduct(Product product)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                Console.WriteLine("HATA: ModelState geçerli değil!");
-                foreach (var modelState in ModelState.Values)
+                if (product.Stock < 0)
                 {
-                    foreach (var error in modelState.Errors)
-                    {
-                        Console.WriteLine("ModelState Hatası: " + error.ErrorMessage);
-                    }
+                    ModelState.AddModelError("Stock", "Stok miktarı negatif olamaz.");
+                    return View(product);
                 }
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(product);
-            }
 
-            try
-            {
                 _context.Products.Add(product);
-                await _context.SaveChangesAsync();
-                Console.WriteLine("ÜRÜN EKLENDİ: " + product.Name);
-                return RedirectToAction("ProductList");
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("VERİTABANI HATASI: " + ex.Message);
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(product);
-            }
+            return View(product);
         }
 
         [HttpGet]
@@ -257,13 +243,36 @@ namespace cansaraciye_ecommerce.Controllers
         [HttpPost]
         public IActionResult UpdateOrderStatus(int orderId, string status)
         {
-            var order = _context.Orders.FirstOrDefault(o => o.Id == orderId);
+            var order = _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefault(o => o.Id == orderId);
+
             if (order == null)
             {
                 return NotFound();
             }
 
-            order.Status = status;
+            //  Eğer sipariş "Onaylandı" olarak işaretlenirse stok düşsün
+            if (status == "Onaylandı" && order.Status != "Onaylandı")
+            {
+                foreach (var item in order.OrderItems)
+                {
+                    var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                    if (product != null && product.Stock >= item.Quantity)
+                    {
+                        product.Stock -= item.Quantity; //  Stok miktarını düşür
+                        _context.Products.Update(product);
+                    }
+                    else
+                    {
+                        TempData["Error"] = $"Üzgünüz, {product?.Name} ürünü için yeterli stok yok!";
+                        return RedirectToAction("OrderDetails", new { id = orderId });
+                    }
+                }
+            }
+
+            order.Status = status; // Sipariş durumu güncelleniyor
             _context.SaveChanges();
 
             return RedirectToAction("OrderDetails", new { id = orderId });

@@ -52,13 +52,21 @@
                     <h5 class="card-title">@product.Name</h5>
                     <p class="card-text text-muted">@product.Category?.Name</p>
                     <p class="card-text fw-bold">@product.Price.ToString("C")</p>
-                    <a href="@Url.Action("Details", "Home", new { id = product.Id })" class="btn btn-info w-100">Detayları
+                    <a href="@Url.Action("ProductDetails", "Home", new { id = product.Id })"
+                        class="btn btn-info w-100">Detayları
                         Gör</a>
                 </div>
                 <div class="card-footer bg-transparent">
                     <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart"
                         asp-route-productId="@product.Id">
-                        <button type="submit" class="btn btn-success w-100">Sepete Ekle</button>
+                        @if (product.Stock > 0)
+                        {
+                            <button type="submit" class="btn btn-success w-100">Sepete Ekle</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-danger w-100" disabled>Tükendi</button>
+                        }
                     </form>
                 </div>
             </div>

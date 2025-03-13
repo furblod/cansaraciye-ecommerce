@@ -19,10 +19,11 @@
         <label>Fiyat</label>
         <input asp-for="Price" type="number" step="0.01" class="form-control" required />
     </div>
-    <div class="form-group">
-        <label>Stok</label>
-        <input asp-for="Stock" type="number" class="form-control" required />
+    <div class="mb-3">
+        <label for="StockQuantity" class="form-label">Stok Miktarı</label>
+        <input type="number" class="form-control" asp-for="Stock" min="0" required>
     </div>
+
     <div class="form-group">
         <label>Ürün Görsel URL</label>
         <input asp-for="ImageUrl" class="form-control" placeholder="Resim URL'sini girin" />

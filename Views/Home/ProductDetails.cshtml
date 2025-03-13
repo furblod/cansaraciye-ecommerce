@@ -4,6 +4,7 @@
 <img src="@Model.ImageUrl" alt="@Model.Name" style="max-width: 300px;">
 <p>@Model.Description</p>
 <p><strong>Fiyat: </strong>@Model.Price.ToString("C")</p>
+<p><strong>Stok Durumu: </strong>@Model.Stock Adet</p>
 <p><strong>Kategori: </strong>@Model.Category.Name</p>
 
 <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Geri Dön</a>

@@ -41,7 +41,7 @@ namespace cansaraciye_ecommerce.Services
         }
 
         // Kullanıcının sepetini getir
-        public async Task<List<ShoppingCartItem>> GetCartItemsAsync(string userId)
+        public async Task<List<ShoppingCartItem>> GetCartItems(string userId)
         {
             return await _context.ShoppingCartItems
                 .Include(c => c.Product)

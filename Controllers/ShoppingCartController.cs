@@ -38,7 +38,7 @@ namespace cansaraciye_ecommerce.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return RedirectToAction("Login", "Account");
 
-            var cartItems = await _shoppingCartService.GetCartItemsAsync(userId);
+            var cartItems = await _shoppingCartService.GetCartItems(userId);
             return View(cartItems);
         }
 
@@ -70,55 +70,39 @@ namespace cansaraciye_ecommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> PlaceOrder(Order order)
         {
-            if (!ModelState.IsValid)
-            {
-                ViewData.ModelState.AddModelError("", "HATA: ModelState geçersiz!");
-                return View("Checkout", order);
-            }
-
-            // Kullanıcı kimliğini al
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userId))
+            if (userId == null) return RedirectToAction("Login", "Account");
+
+            var cartItems = await _shoppingCartService.GetCartItems(userId);
+            if (cartItems.Count == 0)
             {
-                return Content("HATA: Kullanıcı giriş yapmamış!");
+                TempData["Error"] = "Sepetiniz boş, sipariş oluşturulamadı!";
+                return RedirectToAction("Index", "ShoppingCart");
             }
 
-            // UserId'yi ata
             order.UserId = userId;
             order.OrderDate = DateTime.Now;
+            order.Status = "Onay Bekleniyor"; // Varsayılan durum "Onay Bekleniyor"
 
-            // Veritabanına siparişi ekle
             _context.Orders.Add(order);
-            await _context.SaveChangesAsync(); // Önce sipariş kaydedilmeli ki ID oluşsun
+            await _context.SaveChangesAsync(); // Sipariş ID oluşsun
 
-            // Kullanıcının sepetindeki ürünleri al
-            var cartItems = await _shoppingCartService.GetCartItemsAsync(userId);
-            if (cartItems == null || !cartItems.Any())
-            {
-                return Content("HATA: Sepetiniz boş, sipariş oluşturulamadı!");
-            }
-
-            // Sepetteki her ürün için OrderItem oluştur
             foreach (var item in cartItems)
             {
                 var orderItem = new OrderItem
                 {
-                    OrderId = order.Id, // Yeni oluşturulan siparişin ID'si
+                    OrderId = order.Id,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    TotalPrice = item.Quantity * item.Product.Price // Toplam fiyat hesaplandı
+                    TotalPrice = item.Quantity * item.Product.Price
                 };
                 _context.OrderItems.Add(orderItem);
             }
 
-            // Değişiklikleri kaydet
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Sipariş ürünlerini kaydet
+            await _shoppingCartService.ClearCartAsync(userId); // Sepeti temizle
 
-            // Sepeti temizle
-            await _shoppingCartService.ClearCartAsync(userId);
-
-            // Başarı sayfasına yönlendir
-            return RedirectToAction("OrderSuccess", "ShoppingCart");
+            return RedirectToAction("OrderSuccess");
         }
 
         // Sipariş Başarılı Sayfası

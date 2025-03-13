@@ -80,12 +80,30 @@ namespace cansaraciye_ecommerce.Controllers
                 return RedirectToAction("Index", "ShoppingCart");
             }
 
+            foreach (var item in cartItems)
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
+
+                if (product == null)
+                {
+                    TempData["Error"] = "Üzgünüz, bazı ürünler bulunamadı!";
+                    return RedirectToAction("Index", "ShoppingCart");
+                }
+
+                //  **Stok kontrolü yap**
+                if (item.Quantity > product.Stock)
+                {
+                    TempData["Error"] = $"Üzgünüz, {product.Name} stokta sadece {product.Stock} adet mevcut!";
+                    return RedirectToAction("Index", "ShoppingCart");
+                }
+            }
+
             order.UserId = userId;
             order.OrderDate = DateTime.Now;
-            order.Status = "Onay Bekleniyor"; // Varsayılan durum "Onay Bekleniyor"
+            order.Status = "Onay Bekleniyor";
 
             _context.Orders.Add(order);
-            await _context.SaveChangesAsync(); // Sipariş ID oluşsun
+            await _context.SaveChangesAsync(); // **Sipariş ID oluşsun**
 
             foreach (var item in cartItems)
             {
@@ -99,8 +117,8 @@ namespace cansaraciye_ecommerce.Controllers
                 _context.OrderItems.Add(orderItem);
             }
 
-            await _context.SaveChangesAsync(); // Sipariş ürünlerini kaydet
-            await _shoppingCartService.ClearCartAsync(userId); // Sepeti temizle
+            await _context.SaveChangesAsync(); // **Sipariş ürünlerini kaydet**
+            await _shoppingCartService.ClearCartAsync(userId); // **Sepeti temizle**
 
             return RedirectToAction("OrderSuccess");
         }

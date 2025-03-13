@@ -4,7 +4,6 @@
             <th>Ürün</th>
             <th>Adet</th>
             <th>Fiyat</th>
-            <th>İşlem</th>
         </tr>
     </thead>
     <tbody>
@@ -14,6 +13,14 @@
                 <td>@item.Product.Name</td>
                 <td>@item.Quantity</td>
                 <td>@(item.Product.Price* item.Quantity)</td>
+                <td>
+                    @if (item.Quantity > item.Product.Stock)
+                    {
+                        <span class="text-danger">
+                            Stok yetersiz! Maksimum: @item.Product.Stock adet.
+                        </span>
+                    }
+                </td>
                 <td>
                     <form asp-action="RemoveFromCart" asp-route-cartItemId="@item.Id" method="post">
                         <button type="submit" class="btn btn-danger">Sil</button>

@@ -198,15 +198,39 @@ namespace cansaraciye_ecommerce.Controllers
             return RedirectToAction("ProductList");
         }
 
-        public IActionResult Orders()
+        public IActionResult Orders(string statusFilter, string sortOrder)
         {
             var orders = _context.Orders
-                                 .Include(o => o.OrderItems)
-                                 .ThenInclude(oi => oi.Product)
-                                 .ToList();
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .AsQueryable(); // Dinamik sorgu oluşturmak için AsQueryable() kullanıyoruz
 
-            return View(orders);
+            //  **Sipariş Durumuna Göre Filtreleme**
+            if (!string.IsNullOrEmpty(statusFilter) && statusFilter != "Tümü")
+            {
+                orders = orders.Where(o => o.Status == statusFilter);
+            }
+
+            //  **Tarihe Göre Sıralama**
+            switch (sortOrder)
+            {
+                case "newest":
+                    orders = orders.OrderByDescending(o => o.OrderDate);
+                    break;
+                case "oldest":
+                    orders = orders.OrderBy(o => o.OrderDate);
+                    break;
+                default:
+                    orders = orders.OrderByDescending(o => o.OrderDate); // Varsayılan: Yeniden eskiye
+                    break;
+            }
+
+            ViewBag.StatusFilter = statusFilter;
+            ViewBag.SortOrder = sortOrder;
+
+            return View(orders.ToList());
         }
+
 
         public IActionResult OrderDetails(int id)
         {

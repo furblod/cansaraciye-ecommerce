@@ -23,12 +23,34 @@ namespace cansaraciye_ecommerce.Controllers
         }
 
         // Sepete ürün ekleme
-        public async Task<IActionResult> AddToCart(int productId)
+        public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Kullanıcı kimliği
-            if (userId == null) return RedirectToAction("Login", "Account"); // Giriş yapmamışsa yönlendir
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return RedirectToAction("Login", "Account");
 
-            await _shoppingCartService.AddToCartAsync(productId, userId);
+            // Sepette aynı ürün var mı kontrol et
+            var existingCartItem = _context.ShoppingCartItems
+                .FirstOrDefault(ci => ci.ProductId == productId && ci.UserId == userId);
+
+            if (existingCartItem != null)
+            {
+                // Eğer ürün zaten sepette varsa sadece miktarı artır
+                existingCartItem.Quantity += quantity;
+            }
+            else
+            {
+                // Yeni bir ürün ekle
+                var newCartItem = new ShoppingCartItem
+                {
+                    ProductId = productId,
+                    Quantity = quantity,
+                    UserId = userId
+                };
+
+                _context.ShoppingCartItems.Add(newCartItem);
+            }
+
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
 
@@ -128,5 +150,44 @@ namespace cansaraciye_ecommerce.Controllers
         {
             return View();
         }
+
+        // Sepetteki ürün miktarını artır
+        public async Task<IActionResult> IncreaseQuantity(int cartItemId)
+        {
+            await _shoppingCartService.IncreaseQuantityAsync(cartItemId);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DecreaseQuantity(int cartItemId)
+        {
+            var cartItem = await _context.ShoppingCartItems.FindAsync(cartItemId);
+            if (cartItem != null)
+            {
+                if (cartItem.Quantity > 1)
+                {
+                    cartItem.Quantity -= 1;
+                }
+                else
+                {
+                    _context.ShoppingCartItems.Remove(cartItem);
+                }
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity(int cartItemId, int quantity)
+        {
+            var cartItem = await _context.ShoppingCartItems.FindAsync(cartItemId);
+            if (cartItem != null)
+            {
+                cartItem.Quantity = quantity;
+                await _context.SaveChangesAsync();
+            }
+            return Ok();
+        }
+
     }
 }

@@ -11,7 +11,17 @@
         {
             <tr>
                 <td>@item.Product.Name</td>
-                <td>@item.Quantity</td>
+                <td>
+                    <div class="quantity-wrapper">
+                        <button class="btn btn-sm btn-outline-danger" onclick="updateCartQuantity(@item.Id, -1)">-</button>
+
+                        <input type="number" id="cart-quantity-@item.Id" value="@item.Quantity" min="1"
+                            class="form-control quantity-input" onchange="updateCartQuantity(@item.Id, 0)">
+
+                        <button class="btn btn-sm btn-outline-success" onclick="updateCartQuantity(@item.Id, 1)">+</button>
+                    </div>
+                </td>
+                
                 <td>@(item.Product.Price* item.Quantity)</td>
                 <td>
                     @if (item.Quantity > item.Product.Stock)

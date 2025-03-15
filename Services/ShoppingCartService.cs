@@ -67,5 +67,33 @@ namespace cansaraciye_ecommerce.Services
             _context.ShoppingCartItems.RemoveRange(cartItems);
             await _context.SaveChangesAsync();
         }
+
+        public async Task IncreaseQuantityAsync(int cartItemId)
+        {
+            var cartItem = await _context.ShoppingCartItems.FindAsync(cartItemId);
+            if (cartItem != null)
+            {
+                cartItem.Quantity += 1;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DecreaseQuantityAsync(int cartItemId)
+        {
+            var cartItem = await _context.ShoppingCartItems.FindAsync(cartItemId);
+            if (cartItem != null)
+            {
+                if (cartItem.Quantity > 1)
+                {
+                    cartItem.Quantity -= 1;
+                }
+                else
+                {
+                    _context.ShoppingCartItems.Remove(cartItem);
+                }
+                await _context.SaveChangesAsync();
+            }
+        }
+
     }
 }

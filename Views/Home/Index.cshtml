@@ -57,17 +57,23 @@
                         Gör</a>
                 </div>
                 <div class="card-footer bg-transparent">
-                    <form method="post" asp-controller="ShoppingCart" asp-action="AddToCart"
-                        asp-route-productId="@product.Id">
-                        @if (product.Stock > 0)
-                        {
-                            <button type="submit" class="btn btn-success w-100">Sepete Ekle</button>
-                        }
-                        else
-                        {
-                            <button type="submit" class="btn btn-danger w-100" disabled>Tükendi</button>
-                        }
-                    </form>
+                    @if (product.Stock > 0)
+                    {
+                        <div class="quantity-controls">
+                            <button class="btn btn-sm btn-outline-danger decrease-btn"
+                                onclick="decreaseQuantity(@product.Id)">-</button>
+                            <input type="number" id="quantity-@product.Id" value="1" min="1"
+                                class="form-control quantity-input">
+                            <button class="btn btn-sm btn-outline-success increase-btn"
+                                onclick="increaseQuantity(@product.Id)">+</button>
+                        </div>
+
+                        <button class="btn btn-primary add-to-cart-btn" onclick="addToCart(@product.Id)">Sepete Ekle</button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-danger w-100" disabled>Tükendi</button>
+                    }
                 </div>
             </div>
         </div>

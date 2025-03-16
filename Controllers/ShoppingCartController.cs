@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace cansaraciye_ecommerce.Controllers
 {
-    [Authorize] // Kullanıcının giriş yapmasını zorunlu kılar
+    [Authorize]
     public class ShoppingCartController : Controller
     {
         private readonly ShoppingCartService _shoppingCartService;
@@ -83,10 +83,87 @@ namespace cansaraciye_ecommerce.Controllers
         }
 
         // Ödeme Sayfası
-        public IActionResult Checkout()
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userProfile = _context.UserProfiles.FirstOrDefault(p => p.UserId == userId);
+
+            var model = new CheckoutViewModel();
+
+            if (userProfile != null)
+            {
+                model.FullName = $"{userProfile.FirstName} {userProfile.LastName}";
+                model.Address = userProfile.Address;
+                model.City = ""; // Kullanıcının şehir bilgisini UserProfile'a eklemek isterseniz buraya ekleyin.
+                model.PhoneNumber = userProfile.PhoneNumber;
+            }
+
+            return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout(CheckoutViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            //  Sepetteki ürünleri al
+            var cartItems = _context.ShoppingCartItems
+                .Where(c => c.UserId == userId)
+                .Include(c => c.Product)
+                .ToList();
+
+            if (!cartItems.Any())
+            {
+                ModelState.AddModelError("", "Sepetiniz boş! Sipariş oluşturamazsınız.");
+                return View(model);
+            }
+
+            //  Yeni sipariş oluştur
+            var order = new Order
+            {
+                UserId = userId,
+                FullName = model.FullName,
+                Address = model.Address,
+                City = model.City,
+                PhoneNumber = model.PhoneNumber,
+                OrderDate = DateTime.Now,
+                OrderItems = new List<OrderItem>() // Sipariş ürünleri için boş liste başlat
+            };
+
+            decimal totalPrice = 0;
+
+            // Sepetteki ürünleri siparişe ekle
+            foreach (var item in cartItems)
+            {
+                var orderItem = new OrderItem
+                {
+                    Order = order,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    TotalPrice = item.Quantity * item.Product.Price //  Toplam fiyat hesaplanıyor
+                };
+
+                totalPrice += orderItem.TotalPrice;
+                order.OrderItems.Add(orderItem);
+            }
+
+            //  Siparişi veritabanına kaydet
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            // Sepeti temizle
+            _context.ShoppingCartItems.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("OrderSuccess");
+        }
+
 
         // Sipariş Tamamlama İşlemi
         [HttpPost]

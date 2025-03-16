@@ -23,7 +23,7 @@ namespace cansaraciye_ecommerce.Models
 
         public string? UserId { get; set; }
         public DateTime OrderDate { get; set; }
-        public string Status { get; set; } = "Sipariş Alındı";
+        public string Status { get; set; } = "Onay Bekleniyor";
         public List<OrderItem>? OrderItems { get; set; }
     }
 }

@@ -1,14 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using cansaraciye_ecommerce.Data;
+using cansaraciye_ecommerce.Models;
+using System.Linq;
 
 namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
 {
@@ -16,60 +13,58 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        public string Username { get; set; }
-
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            [Required]
+            [Display(Name = "Ad")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Soyad")]
+            public string LastName { get; set; }
+
+            [Display(Name = "Telefon Numarası")]
             [Phone]
-            [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Adres")]
+            public string Address { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
+            var userProfile = _context.UserProfiles.FirstOrDefault(p => p.UserId == user.Id);
+            if (userProfile == null)
+            {
+                userProfile = new UserProfile { UserId = user.Id };
+                _context.UserProfiles.Add(userProfile);
+                await _context.SaveChangesAsync();
+            }
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                FirstName = userProfile.FirstName,
+                LastName = userProfile.LastName,
+                PhoneNumber = userProfile.PhoneNumber,
+                Address = userProfile.Address
             };
         }
 
@@ -78,7 +73,7 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound("Kullanıcı bulunamadı.");
             }
 
             await LoadAsync(user);
@@ -90,7 +85,7 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound("Kullanıcı bulunamadı.");
             }
 
             if (!ModelState.IsValid)
@@ -99,19 +94,22 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var userProfile = _context.UserProfiles.FirstOrDefault(p => p.UserId == user.Id);
+            if (userProfile == null)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
-                }
+                return NotFound("Profil bulunamadı.");
             }
 
+            userProfile.FirstName = Input.FirstName;
+            userProfile.LastName = Input.LastName;
+            userProfile.PhoneNumber = Input.PhoneNumber;
+            userProfile.Address = Input.Address;
+
+            _context.UserProfiles.Update(userProfile);
+            await _context.SaveChangesAsync();
+
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Profiliniz başarıyla güncellendi!";
             return RedirectToPage();
         }
     }

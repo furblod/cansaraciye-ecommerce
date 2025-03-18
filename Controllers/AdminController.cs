@@ -277,29 +277,37 @@ namespace cansaraciye_ecommerce.Controllers
                 return NotFound();
             }
 
-            //  Eğer sipariş "Onaylandı" olarak işaretlenirse stok düşsün
-            if (status == "Onaylandı" && order.Status != "Onaylandı")
+            using var transaction = _context.Database.BeginTransaction();
+
+            try
             {
-                foreach (var item in order.OrderItems)
+                // Sipariş iptal edildiyse stok geri eklenmeli
+                if (status == "İptal Edildi" && order.Status != "İptal Edildi")
                 {
-                    var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
-                    if (product != null && product.Stock >= item.Quantity)
+                    foreach (var item in order.OrderItems)
                     {
-                        product.Stock -= item.Quantity; //  Stok miktarını düşür
-                        _context.Products.Update(product);
-                    }
-                    else
-                    {
-                        TempData["Error"] = $"Üzgünüz, {product?.Name} ürünü için yeterli stok yok!";
-                        return RedirectToAction("OrderDetails", new { id = orderId });
+                        var product = _context.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                        if (product != null)
+                        {
+                            product.Stock += item.Quantity; // 🔹 Stok geri artır
+                            _context.Products.Update(product);
+                        }
                     }
                 }
+
+                order.Status = status;
+                _context.Orders.Update(order);
+                _context.SaveChanges();
+                transaction.Commit();
+
+                return RedirectToAction("Orders");
             }
-
-            order.Status = status; // Sipariş durumu güncelleniyor
-            _context.SaveChanges();
-
-            return RedirectToAction("OrderDetails", new { id = orderId });
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                TempData["Error"] = "Sipariş durumu güncellenirken hata oluştu!";
+                return RedirectToAction("Orders");
+            }
         }
     }
 }

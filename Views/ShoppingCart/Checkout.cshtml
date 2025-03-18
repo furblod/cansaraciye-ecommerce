@@ -2,7 +2,7 @@
 
 <h2>Sipariş Ver</h2>
 
-<form asp-action="Checkout" method="post">
+<form asp-action="PlaceOrder" asp-controller="ShoppingCart" method="post">
     <div class="mb-3">
         <label asp-for="FullName" class="form-label"></label>
         <input asp-for="FullName" class="form-control" required />

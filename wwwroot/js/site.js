@@ -53,3 +53,14 @@ function updateCartQuantity(cartItemId, change) {
     });
 }
 
+
+document.addEventListener("DOMContentLoaded", function () {
+    let stockWarning = document.querySelector(".stock-warning");
+    let checkoutButton = document.getElementById("checkoutButton");
+
+    if (stockWarning) {
+        checkoutButton.disabled = true;
+    } else {
+        checkoutButton.disabled = false;
+    }
+});

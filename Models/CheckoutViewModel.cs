@@ -19,5 +19,9 @@ namespace cansaraciye_ecommerce.Models
         [Required]
         [Display(Name = "Telefon")]
         public string PhoneNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Toplam Tutar")]
+        public decimal TotalAmount { get; set; }
     }
 }

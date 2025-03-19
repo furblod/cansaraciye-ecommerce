@@ -87,20 +87,37 @@ namespace cansaraciye_ecommerce.Controllers
         public async Task<IActionResult> Checkout()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userProfile = _context.UserProfiles.FirstOrDefault(p => p.UserId == userId);
+            if (userId == null) return RedirectToAction("Login", "Account");
 
-            var model = new CheckoutViewModel();
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            var cartItems = await _shoppingCartService.GetCartItems(userId);
 
-            if (userProfile != null)
+            if (cartItems == null || !cartItems.Any())
             {
-                model.FullName = $"{userProfile.FirstName} {userProfile.LastName}";
-                model.Address = userProfile.Address;
-                model.City = ""; // Kullanıcının şehir bilgisini UserProfile'a eklemek isterseniz buraya ekleyin.
-                model.PhoneNumber = userProfile.PhoneNumber;
+                TempData["Error"] = "Sepetiniz boş!";
+                return RedirectToAction("Index");
             }
+
+            // **Toplam Tutarı Hesaplayalım**
+            decimal totalAmount = cartItems.Sum(item => item.Product.Price * item.Quantity);
+
+            // **Hata Ayıklama İçin Konsola Yazalım**
+            Console.WriteLine($"🛒 Sepette {cartItems.Count} ürün var.");
+            Console.WriteLine($"💰 Hesaplanan toplam tutar: {totalAmount} TL");
+
+            var model = new CheckoutViewModel
+            {
+                FullName = userProfile != null ? $"{userProfile.FirstName} {userProfile.LastName}" : "Ad Soyad Girilmedi",
+                Address = userProfile?.Address ?? "Adres Girilmedi",
+                City = "İstanbul",
+                PhoneNumber = userProfile?.PhoneNumber ?? "0000000000",
+                TotalAmount = totalAmount  // **Toplam Tutar Artık Boş Gelmeyecek**
+            };
 
             return View(model);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutViewModel model)
@@ -164,6 +181,79 @@ namespace cansaraciye_ecommerce.Controllers
             return RedirectToAction("OrderSuccess");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CheckoutProcess(CheckoutViewModel model, string cardNumber, string expireMonth, string expireYear, string cvc)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // **🚀 1️⃣ Stok kontrolünü sipariş başlamadan yapalım**
+            var cartItems = await _shoppingCartService.GetCartItems(userId);
+
+            foreach (var item in cartItems)
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
+                if (product == null || product.Stock < item.Quantity)
+                {
+                    Console.WriteLine($"❌ HATA: {product?.Name} stok yetersiz! Maksimum {product?.Stock} adet alınabilir.");
+                    TempData["Error"] = $"{product?.Name} için yeterli stok yok! Maksimum {product?.Stock} adet alabilirsiniz.";
+                    return RedirectToAction("Index"); // **Sipariş sürecini durduruyoruz!**
+                }
+            }
+
+            // **🚀 2️⃣ Ödeme işlemini başlat**
+            var payment = await _shoppingCartService.ProcessPaymentAsync(userId, model.TotalAmount, cardNumber, expireMonth, expireYear, cvc);
+
+            if (payment == null)
+            {
+                TempData["Error"] = "Ödeme başarısız oldu!";
+                return RedirectToAction("Checkout");
+            }
+
+            // **🚀 3️⃣ Sipariş oluştur (Eğer stok uygunsa)**
+            var order = new Order
+            {
+                UserId = userId,
+                FullName = model.FullName,
+                Address = model.Address,
+                City = model.City,
+                PhoneNumber = model.PhoneNumber,
+                OrderDate = DateTime.Now,
+                Status = "Onay Bekleniyor",
+               // TotalPrice = model.TotalAmount
+            };
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            // **🚀 4️⃣ Sipariş ürünlerini ekleyelim**
+            foreach (var item in cartItems)
+            {
+                var orderItem = new OrderItem
+                {
+                    OrderId = order.Id,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    TotalPrice = item.Quantity * item.Product.Price
+                };
+                _context.OrderItems.Add(orderItem);
+
+                // **🚀 5️⃣ Stokları güncelle**
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
+                if (product != null)
+                {
+                    product.Stock -= item.Quantity;
+                    _context.Products.Update(product);
+                    Console.WriteLine($"✅ {product.Name} stoktan düşüldü! Kalan stok: {product.Stock}");
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            await _shoppingCartService.ClearCartAsync(userId);
+
+            Console.WriteLine("✅ Sipariş tamamlandı ve stoklar güncellendi!");
+
+            return RedirectToAction("OrderSuccess");
+        }
 
         // Sipariş Tamamlama İşlemi
         [HttpPost]

@@ -260,3 +260,4 @@ C:\Users\furka\cansaraciye-ecommerce\obj\Debug\net8.0\refint\cansaraciye-ecommer
 C:\Users\furka\cansaraciye-ecommerce\obj\Debug\net8.0\cansaraciye-ecommerce.pdb
 C:\Users\furka\cansaraciye-ecommerce\obj\Debug\net8.0\cansaraciye-ecommerce.genruntimeconfig.cache
 C:\Users\furka\cansaraciye-ecommerce\obj\Debug\net8.0\ref\cansaraciye-ecommerce.dll
+C:\Users\furka\cansaraciye-ecommerce\bin\Debug\net8.0\Iyzipay.dll

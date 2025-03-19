@@ -232,20 +232,24 @@ namespace cansaraciye_ecommerce.Controllers
         }
 
 
-        public IActionResult OrderDetails(int id)
+        public async Task<IActionResult> OrderDetails(int id)
         {
-            var order = _context.Orders
-                                .Include(o => o.OrderItems)
-                                .ThenInclude(oi => oi.Product)
-                                .FirstOrDefault(o => o.Id == id);
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
             if (order == null)
             {
+                Console.WriteLine($"❌ HATA: Sipariş {id} bulunamadı!");
                 return NotFound();
             }
 
+            Console.WriteLine($"✅ Sipariş {id} detayları alındı! {order.OrderItems.Count} ürün bulundu.");
+
             return View(order);
         }
+
 
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteOrder(int id)

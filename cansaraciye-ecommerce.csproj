@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+  <PackageReference Include="Iyzipay" Version="2.1.67" />
   <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">

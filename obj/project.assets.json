@@ -640,6 +640,18 @@
           }
         }
       },
+      "Iyzipay/2.1.67": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2"
+        },
+        "compile": {
+          "lib/netstandard2.1/Iyzipay.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/Iyzipay.dll": {}
+        }
+      },
       "Microsoft.AspNetCore.Cryptography.Internal/8.0.2": {
         "type": "package",
         "compile": {
@@ -3733,6 +3745,19 @@
         "lib/netstandard1.0/zh-Hant/Humanizer.resources.dll",
         "lib/netstandard2.0/zh-Hant/Humanizer.resources.dll",
         "logo.png"
+      ]
+    },
+    "Iyzipay/2.1.67": {
+      "sha512": "kkfOlKCwF2H3eponeJWU51yN1Y8EzFqz/ckYgCD7OLqqjUP455Cgt8nxpvwzXCVdzhHinaQe7469gZMwZl/UpQ==",
+      "type": "package",
+      "path": "iyzipay/2.1.67",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "iyzipay.2.1.67.nupkg.sha512",
+        "iyzipay.nuspec",
+        "lib/net45/Iyzipay.dll",
+        "lib/netstandard2.1/Iyzipay.dll"
       ]
     },
     "Microsoft.AspNetCore.Cryptography.Internal/8.0.2": {
@@ -8080,6 +8105,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Iyzipay >= 2.1.67",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.2",
       "Microsoft.AspNetCore.Identity.UI >= 8.0.2",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.2",
@@ -8131,6 +8157,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "Iyzipay": {
+            "target": "Package",
+            "version": "[2.1.67, )"
+          },
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
             "target": "Package",
             "version": "[8.0.2, )"

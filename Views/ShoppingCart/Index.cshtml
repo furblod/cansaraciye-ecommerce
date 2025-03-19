@@ -21,7 +21,7 @@
                         <button class="btn btn-sm btn-outline-success" onclick="updateCartQuantity(@item.Id, 1)">+</button>
                     </div>
                 </td>
-                
+
                 <td>@(item.Product.Price* item.Quantity)</td>
                 <td>
                     @if (item.Quantity > item.Product.Stock)
@@ -43,5 +43,5 @@
 
 <!-- Siparişi Tamamla Butonu -->
 <form asp-action="Checkout" method="get">
-    <button type="submit" class="btn btn-success">Siparişi Tamamla</button>
+    <button id="checkoutButton" type="submit" class="btn btn-success" disabled>Siparişi Tamamla</button>
 </form>

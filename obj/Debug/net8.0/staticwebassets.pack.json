@@ -13,6 +13,18 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\slider1.jpg",
+      "PackagePath": "staticwebassets\\images\\slider1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\slider2.jpg",
+      "PackagePath": "staticwebassets\\images\\slider2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\slider3.jpg",
+      "PackagePath": "staticwebassets\\images\\slider3.jpg"
+    },
+    {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

@@ -66,3 +66,38 @@ body {
   padding: 5px 10px;
   font-size: 14px;
 }
+
+.product-img {
+  transition: transform 0.4s ease;
+}
+
+.product-img:hover {
+  transform: scale(1.08);
+}
+
+.card {
+  transition: none;
+  /* Kartın kendisi büyümesin */
+}
+
+.quantity-box input {
+  padding: 0.25rem 0.5rem;
+}
+
+/* 1️⃣ Kartın alt kısmındaki boşluğu azalt */
+.card-body {
+  padding-bottom: 0.5rem;
+}
+
+/* 2️⃣ Sayısal input içindeki yukarı/aşağı okları kaldır */
+.quantity-box input::-webkit-outer-spin-button,
+.quantity-box input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quantity-box input[type=number] {
+  -moz-appearance: textfield;
+  /* Firefox için */
+  text-align: center;
+}

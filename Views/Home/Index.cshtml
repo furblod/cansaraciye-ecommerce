@@ -2,79 +2,84 @@
 @{
     ViewData["Title"] = "Ürünler";
 }
+<div id="mainSlider" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="hover">
+    <div class="carousel-inner rounded shadow">
+        <div class="carousel-item active">
+            <img src="/images/slider1.jpg" class="d-block w-100" alt="Üretim">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                <h5>Kendi Üretimimiz, Kalite Garantili</h5>
+                <p>Çantalar, valizler ve daha fazlası doğrudan üreticiden.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="/images/slider2.jpg" class="d-block w-100" alt="Toptan Satış">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                <h5>Toptan Satış Avantajları</h5>
+                <p>Bayilere özel fiyatlar ve geniş ürün yelpazesi.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="/images/slider3.jpg" class="d-block w-100" alt="Perakende Satış">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                <h5>Perakende Alışveriş Keyfi</h5>
+                <p>Uygun fiyatlarla doğrudan müşteriye satış.</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
 
 <h2 class="text-center mb-4">Ürünler</h2>
 
-<!-- 🔎 Arama ve Filtreleme -->
-<form method="get" class="mb-4">
-    <div class="row">
-        <div class="col-md-4">
-            <input type="text" name="searchTerm" class="form-control" placeholder="Ürün Ara..."
-                value="@Context.Request.Query["searchTerm"]" />
-        </div>
-
-        <div class="col-md-3">
-            <select name="categoryId" class="form-control">
-                <option value="">Tüm Kategoriler</option>
-                @foreach (var category in ViewBag.Categories)
-                {
-                    <option value="@category.Id"
-                        selected="@(Context.Request.Query["categoryId"] == category.Id.ToString())">@category.Name</option>
-                }
-            </select>
-        </div>
-
-        <div class="col-md-3">
-            <select name="sortOrder" class="form-control">
-                <option value="">Sırala</option>
-                <option value="price_asc" selected="@(Context.Request.Query["sortOrder"] == "price_asc")">Fiyat:
-                    Düşükten Yükseğe</option>
-                <option value="price_desc" selected="@(Context.Request.Query["sortOrder"] == "price_desc")">Fiyat:
-                    Yüksekten Düşüğe</option>
-            </select>
-        </div>
-
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
-        </div>
-    </div>
-</form>
-
-<!-- 📦 Ürünleri Bootstrap Card ile Listeleme -->
 <div class="row">
     @foreach (var product in Model)
     {
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name"
-                    style="height: 250px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text text-muted">@product.Category?.Name</p>
-                    <p class="card-text fw-bold">@product.Price.ToString("C")</p>
-                    <a href="@Url.Action("ProductDetails", "Home", new { id = product.Id })"
-                        class="btn btn-info w-100">Detayları
-                        Gör</a>
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+                <div class="overflow-hidden" style="height: 250px;">
+                    <img src="@product.ImageUrl" class="card-img-top product-img" alt="@product.Name"
+                        style="height: 100%; width: 100%; object-fit: cover;">
                 </div>
-                <div class="card-footer bg-transparent">
+
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text text-muted mb-1">@product.Category?.Name</p>
+                    <span class="badge bg-success fs-6 mb-3">@product.Price.ToString("C")</span>
+
+                    <a href="@Url.Action("ProductDetails", "Home", new { id = product.Id })"
+                        class="btn btn-outline-primary w-100 mb-2">Detayları Gör</a>
+                </div>
+
+                <div class="card-footer bg-white border-0">
                     @if (product.Stock > 0)
                     {
-                        <div class="quantity-controls">
-                            <button class="btn btn-sm btn-outline-danger decrease-btn"
-                                onclick="decreaseQuantity(@product.Id)">-</button>
-                            <input type="number" id="quantity-@product.Id" value="1" min="1"
-                                class="form-control quantity-input">
-                            <button class="btn btn-sm btn-outline-success increase-btn"
-                                onclick="increaseQuantity(@product.Id)">+</button>
-                        </div>
+                        <div class="d-flex align-items-center justify-content-between gap-2">
+                            <button class="btn btn-primary add-to-cart-btn flex-grow-1" onclick="addToCart(@product.Id)">
+                                <i class="bi bi-cart-plus"></i> Sepete Ekle
+                            </button>
 
-                        <button class="btn btn-primary add-to-cart-btn" onclick="addToCart(@product.Id)">Sepete Ekle</button>
+                            <div class="input-group quantity-box" style="width: 130px;">
+                                <button class="btn btn-sm btn-outline-secondary"
+                                    onclick="decreaseQuantity(@product.Id)">-</button>
+                                <input type="number" id="quantity-@product.Id" value="1" min="1"
+                                    class="form-control text-center" style="width: 45px;">
+                                <button class="btn btn-sm btn-outline-secondary"
+                                    onclick="increaseQuantity(@product.Id)">+</button>
+                            </div>
+                        </div>
                     }
                     else
                     {
-                        <button type="submit" class="btn btn-danger w-100" disabled>Tükendi</button>
+                        <button class="btn btn-danger w-100" disabled>Tükendi</button>
                     }
                 </div>
+
             </div>
         </div>
     }

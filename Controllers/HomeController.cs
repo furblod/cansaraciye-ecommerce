@@ -54,14 +54,13 @@ public class HomeController : Controller
 
     public async Task<IActionResult> ProductDetails(int id)
     {
-        var product = await _context.Products
-            .Include(p => p.Category)
-            .FirstOrDefaultAsync(p => p.Id == id);
+        var product = _context.Products
+        .Include(p => p.ProductImages)
+        .Include(p => p.Category) // varsa kategori de dahil edilsin
+        .FirstOrDefault(p => p.Id == id);
 
         if (product == null)
-        {
             return NotFound();
-        }
 
         return View(product);
     }

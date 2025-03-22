@@ -18,12 +18,15 @@ namespace cansaraciye_ecommerce.Models
         [Required(ErrorMessage = "Stok bilgisi gereklidir.")]
         public int Stock { get; set; }
 
-        public string? ImageUrl { get; set; }
+        public string? ImageUrl { get; set; } // Ana görsel
 
         [Required(ErrorMessage = "Kategori seçilmelidir.")]
         [ForeignKey("Category")]
         public int? CategoryId { get; set; }
 
         public virtual Category? Category { get; set; }
+
+        // 🔹 Yeni: Çoklu ürün görselleri
+        public virtual List<ProductImage>? ProductImages { get; set; }
     }
 }

@@ -3,9 +3,24 @@
 <div class="container mt-4">
     <div class="row">
         <!-- Ürün Resmi -->
-        <div class="col-md-6 text-center">
-            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded shadow product-img"
+        <div class="col-md-6 text-center mb-4">
+            <img id="mainImage" src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded shadow"
                 style="max-height: 400px; object-fit: contain;">
+
+            <!-- Alt tarafta küçük görseller -->
+            @if (Model.ProductImages != null && Model.ProductImages.Any())
+            {
+                <div class="d-flex justify-content-center gap-2 mb-4">
+                    <img src="@Model.ImageUrl" class="img-thumbnail" style="width: 70px; height: 70px; cursor: pointer;"
+                        onclick="changeMainImage(this.src)" />
+
+                    @foreach (var image in Model.ProductImages)
+                    {
+                        <img src="@image.ImageUrl" class="img-thumbnail" style="width: 70px; height: 70px; cursor: pointer;"
+                            onclick="changeMainImage(this.src)" />
+                    }
+                </div>
+            }
         </div>
 
         <!-- Ürün Bilgileri -->
@@ -64,5 +79,8 @@
         if (current < 1) current = 1;
 
         input.value = current;
+    }
+    function changeMainImage(src) {
+        document.getElementById("mainImage").src = src;
     }
 </script>

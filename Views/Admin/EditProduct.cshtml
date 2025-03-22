@@ -1,42 +1,82 @@
 @model cansaraciye_ecommerce.Models.Product
 
-@{
-    ViewData["Title"] = "Ürün Düzenle";
-}
-
 <h2>Ürün Düzenle</h2>
 
-<form asp-controller="Admin" asp-action="EditProduct" method="post">
-    <input type="hidden" asp-for="Id" /> <!-- ✅ Güncelleme için ID gerekiyor -->
+<form asp-action="EditProduct" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
     <div class="form-group">
         <label>Ürün Adı</label>
         <input asp-for="Name" class="form-control" required />
     </div>
+
     <div class="form-group">
         <label>Açıklama</label>
         <textarea asp-for="Description" class="form-control"></textarea>
     </div>
+
     <div class="form-group">
         <label>Fiyat</label>
         <input asp-for="Price" type="number" step="0.01" class="form-control" required />
     </div>
+
     <div class="form-group">
         <label>Stok</label>
-        <input asp-for="Stock" type="number" class="form-control" required />
+        <input asp-for="Stock" type="number" class="form-control" min="0" required />
     </div>
+
+    <!-- Ana görsel ve silme -->
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="mb-2 position-relative" style="display:inline-block;">
+            <label>Mevcut Ana Görsel</label><br />
+            <img src="@Model.ImageUrl" width="120" class="img-thumbnail mb-2" />
+
+            <!-- Ana görseli silmek için GET -->
+            <a asp-action="DeleteMainImage" asp-controller="Admin" asp-route-productId="@Model.Id"
+                onclick="return confirm('Ana görsel silinsin mi?')"
+                class="btn btn-sm btn-danger rounded-circle px-2 py-1 position-absolute"
+                style="top: -6px; right: -6px; z-index:5;">×</a>
+        </div>
+    }
+
     <div class="form-group">
-        <label>Ürün Görsel URL</label>
-        <input asp-for="ImageUrl" class="form-control" />
+        <label>Yeni Ana Görsel (değiştirmek istersen)</label>
+        <input type="file" name="MainImage" class="form-control" />
     </div>
+
+    <div class="form-group">
+        <label>Yeni Ekstra Görseller</label>
+        <input type="file" name="ExtraImages" class="form-control" multiple />
+    </div>
+
+    <!-- Mevcut ekstra görseller ve silme -->
+    @if (Model.ProductImages != null && Model.ProductImages.Any())
+    {
+        <label>Mevcut Ekstra Görseller</label>
+        <div class="d-flex gap-2 flex-wrap mb-3">
+            @foreach (var img in Model.ProductImages)
+            {
+                <div class="position-relative" style="width: 80px;">
+                    <img src="@img.ImageUrl" class="img-thumbnail" style="width: 100%;" />
+
+                    <a asp-action="DeleteProductImage" asp-controller="Admin" asp-route-id="@img.Id"
+                        onclick="return confirm('Bu görsel silinsin mi?')"
+                        class="btn btn-sm btn-danger rounded-circle px-2 py-1 position-absolute"
+                        style="top: -6px; right: -6px; z-index:5;">×</a>
+                </div>
+            }
+        </div>
+    }
+
     <div class="form-group">
         <label>Kategori</label>
-        <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"
-            class="form-control">
+        <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))"
+            class="form-control" required>
             <option value="">Kategori Seçin</option>
         </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Güncelle</button>
-</form>
 
-<a class="btn btn-secondary" asp-controller="Admin" asp-action="ProductList">Geri</a>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <a asp-action="ProductList" class="btn btn-secondary">Geri</a>
+</form>

@@ -6,28 +6,39 @@
 
 <h2>Yeni Ürün Ekle</h2>
 
-<form asp-controller="Admin" asp-action="CreateProduct" method="post">
+<form asp-controller="Admin" asp-action="CreateProduct" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label>Ürün Adı</label>
         <input asp-for="Name" class="form-control" required />
     </div>
+
     <div class="form-group">
         <label>Açıklama</label>
         <textarea asp-for="Description" class="form-control"></textarea>
     </div>
+
     <div class="form-group">
         <label>Fiyat</label>
         <input asp-for="Price" type="number" step="0.01" class="form-control" required />
     </div>
+
     <div class="mb-3">
-        <label for="StockQuantity" class="form-label">Stok Miktarı</label>
-        <input type="number" class="form-control" asp-for="Stock" min="0" required>
+        <label class="form-label">Stok Miktarı</label>
+        <input type="number" class="form-control" asp-for="Stock" min="0" required />
     </div>
 
+    <!-- ✅ Ana görsel yükleme -->
     <div class="form-group">
-        <label>Ürün Görsel URL</label>
-        <input asp-for="ImageUrl" class="form-control" placeholder="Resim URL'sini girin" />
+        <label>Ana Ürün Görseli</label>
+        <input type="file" name="MainImage" class="form-control" accept="image/*" required />
     </div>
+
+    <!-- ✅ Çoklu görsel yükleme -->
+    <div class="form-group">
+        <label>Ekstra Ürün Görselleri</label>
+        <input type="file" name="ExtraImages" class="form-control" accept="image/*" multiple />
+    </div>
+
     <div class="form-group">
         <label>Kategori</label>
         <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"
@@ -36,7 +47,6 @@
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
-
 
     <button type="submit" class="btn btn-success">Kaydet</button>
 </form>

@@ -111,7 +111,7 @@ namespace cansaraciye_ecommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProduct(Product product)
+        public async Task<IActionResult> CreateProduct(Product product, IFormFile MainImage, List<IFormFile> ExtraImages)
         {
             if (ModelState.IsValid)
             {
@@ -121,70 +121,168 @@ namespace cansaraciye_ecommerce.Controllers
                     return View(product);
                 }
 
+                // Ana görseli yükle
+                if (MainImage != null && MainImage.Length > 0)
+                {
+                    var fileName = Guid.NewGuid() + Path.GetExtension(MainImage.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await MainImage.CopyToAsync(stream);
+                    }
+
+                    product.ImageUrl = "/images/" + fileName;
+                }
+
+                // Ürünü önce kaydet (Id üretilecek)
                 _context.Products.Add(product);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+
+                // Çoklu görselleri yükle
+                if (ExtraImages != null && ExtraImages.Any())
+                {
+                    foreach (var image in ExtraImages)
+                    {
+                        var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+
+                        var productImage = new ProductImage
+                        {
+                            ProductId = product.Id,
+                            ImageUrl = "/images/" + fileName
+                        };
+
+                        _context.ProductImages.Add(productImage);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction("Index");
             }
+
             return View(product);
         }
 
-        [HttpGet]
         public IActionResult EditProduct(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
+
             if (product == null)
-            {
                 return NotFound();
-            }
 
             ViewBag.Categories = _context.Categories.ToList();
             return View(product);
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> EditProduct(Product product)
+        public async Task<IActionResult> EditProduct(int id, IFormFile MainImage, List<IFormFile> ExtraImages, string Name, string Description, decimal Price, int Stock, int CategoryId)
         {
-            if (!ModelState.IsValid)
+            var existingProduct = await _context.Products
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (existingProduct == null)
+                return NotFound();
+
+            // Ana verileri güncelle
+            existingProduct.Name = Name;
+            existingProduct.Description = Description;
+            existingProduct.Price = Price;
+            existingProduct.Stock = Stock;
+            existingProduct.CategoryId = CategoryId;
+
+            // Ana görsel yükle (varsa)
+            if (MainImage != null && MainImage.Length > 0)
             {
-                Console.WriteLine("HATA: ModelState geçerli değil!");
-                foreach (var modelState in ModelState.Values)
+                var fileName = Guid.NewGuid() + Path.GetExtension(MainImage.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    foreach (var error in modelState.Errors)
+                    await MainImage.CopyToAsync(stream);
+                }
+
+                existingProduct.ImageUrl = "/images/" + fileName;
+            }
+
+            // Ekstra görselleri yükle
+            if (ExtraImages != null && ExtraImages.Any())
+            {
+                foreach (var image in ExtraImages)
+                {
+                    var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        Console.WriteLine("ModelState Hatası: " + error.ErrorMessage);
+                        await image.CopyToAsync(stream);
                     }
+
+                    _context.ProductImages.Add(new ProductImage
+                    {
+                        ProductId = existingProduct.Id,
+                        ImageUrl = "/images/" + fileName
+                    });
                 }
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(product);
             }
 
-            try
-            {
-                var existingProduct = _context.Products.Find(product.Id);
-                if (existingProduct == null)
-                {
-                    return NotFound();
-                }
-
-                existingProduct.Name = product.Name;
-                existingProduct.Description = product.Description;
-                existingProduct.Price = product.Price;
-                existingProduct.Stock = product.Stock;
-                existingProduct.ImageUrl = product.ImageUrl;
-                existingProduct.CategoryId = product.CategoryId;
-
-                await _context.SaveChangesAsync();
-                Console.WriteLine("ÜRÜN GÜNCELLENDİ: " + existingProduct.Name);
-
-                return RedirectToAction("ProductList");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("VERİTABANI HATASI: " + ex.Message);
-                ViewBag.Categories = _context.Categories.ToList();
-                return View(product);
-            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ProductList");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteProductImage(int id)
+        {
+            var image = await _context.ProductImages.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+            if (image == null) return NotFound();
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
+
+            var productId = image.ProductId;
+
+            var imageToDelete = new ProductImage { Id = id };
+            _context.ProductImages.Attach(imageToDelete);
+            _context.ProductImages.Remove(imageToDelete);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("EditProduct", new { id = productId });
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteMainImage(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null) return NotFound();
+
+            if (!string.IsNullOrEmpty(product.ImageUrl))
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", product.ImageUrl.TrimStart('/'));
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
+                }
+
+                product.ImageUrl = null;
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("EditProduct", new { id = productId });
+        }
+
 
 
         public async Task<IActionResult> DeleteProduct(int id)

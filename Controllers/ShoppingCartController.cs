@@ -92,10 +92,21 @@ namespace cansaraciye_ecommerce.Controllers
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(p => p.UserId == userId);
             var cartItems = await _shoppingCartService.GetCartItems(userId);
 
+            foreach (var item in cartItems)
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.ProductId);
+                if (product == null || product.Stock < item.Quantity)
+                {
+                    Console.WriteLine($"❌ HATA: {product?.Name} stok yetersiz! Maksimum {product?.Stock} adet alınabilir.");
+                    TempData["Error"] = $"{product?.Name} için yeterli stok yok! Maksimum {product?.Stock} adet alabilirsiniz.";
+                    return RedirectToAction("Index", "ShoppingCart"); // **Sipariş sürecini durduruyoruz!**
+                }
+            }
+
             if (cartItems == null || !cartItems.Any())
             {
                 TempData["Error"] = "Sepetiniz boş!";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "ShoppingCart");
             }
 
             // **Toplam Tutarı Hesaplayalım**
@@ -117,8 +128,6 @@ namespace cansaraciye_ecommerce.Controllers
             return View(model);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutViewModel model)
         {
@@ -126,6 +135,7 @@ namespace cansaraciye_ecommerce.Controllers
             {
                 return View(model);
             }
+
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -196,7 +206,7 @@ namespace cansaraciye_ecommerce.Controllers
                 {
                     Console.WriteLine($"❌ HATA: {product?.Name} stok yetersiz! Maksimum {product?.Stock} adet alınabilir.");
                     TempData["Error"] = $"{product?.Name} için yeterli stok yok! Maksimum {product?.Stock} adet alabilirsiniz.";
-                    return RedirectToAction("checkout"); // **Sipariş sürecini durduruyoruz!**
+                    return RedirectToAction("Index", "ShoppingCart"); // **Sipariş sürecini durduruyoruz!**
                 }
             }
 

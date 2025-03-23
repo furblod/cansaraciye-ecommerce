@@ -2,6 +2,44 @@
 @{
     ViewData["Title"] = "Ürünler";
 }
+<div class="collapse" id="filterPanel">
+    <div class="card card-body mb-3">
+        <form method="get" action="/Home/Index">
+            <div class="row g-3">
+
+                <!-- Arama -->
+                <div class="col-md-4">
+                    <input type="text" name="searchTerm" class="form-control" placeholder="Ürün adı ya da açıklama" />
+                </div>
+
+                <!-- Kategori -->
+                <div class="col-md-3">
+                    <select name="categoryId" class="form-select">
+                        <option value="">Tüm Kategoriler</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Sıralama -->
+                <div class="col-md-3">
+                    <select name="sortOrder" class="form-select">
+                        <option value="">Sıralama Seç</option>
+                        <option value="price_asc">Fiyat (Düşükten Yükseğe)</option>
+                        <option value="price_desc">Fiyat (Yüksekten Düşüğe)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Ara</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div id="mainSlider" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="hover">
     <div class="carousel-inner rounded shadow">
         <div class="carousel-item active">
@@ -35,7 +73,7 @@
 </div>
 
 
-<h2 class="text-center mb-4">Ürünler</h2>
+<h2 id="productTitle" class="text-center mb-4">Ürünler</h2>
 
 <div class="row">
     @foreach (var product in Model)
@@ -84,3 +122,22 @@
         </div>
     }
 </div>
+
+
+@section Scripts {
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasSearch = urlParams.has('searchTerm') || urlParams.has('categoryId') || urlParams.has('sortOrder');
+
+            if (hasSearch) {
+                const target = document.getElementById('productTitle');
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    </script>
+}

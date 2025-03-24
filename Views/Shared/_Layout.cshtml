@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string pageDescription = ViewData["MetaDescription"] as string ?? "Yerli üretim çantalarımızla toptan ve perakende satışta hizmetinizdeyiz.";
+    string pageTitle = ViewData["Title"] as string ?? "Cansaraciye - Çanta Üretim ve Satış";
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,6 +15,11 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/cansaraciye_ecommerce.styles.css" asp-append-version="true" />
     <script src="~/js/site.js"></script>
+    <meta name="description" content="@pageDescription">
+    <meta property="og:title" content="@pageTitle">
+    <meta property="og:description" content="@pageDescription">
+    <meta property="og:image" content="/images/about-us.jpg">
+
 </head>
 
 <body>
@@ -54,6 +65,10 @@
                                 <a class="nav-link text-dark" asp-action="Orders" asp-controller="Order">Siparişlerim</a>
                             </li>
                         }
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="About" asp-action="Index">Hakkımızda</a>
+                        </li>
 
                     </ul>
                     <partial name="_LoginPartial" />

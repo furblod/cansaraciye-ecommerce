@@ -23,74 +23,143 @@
 
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">cansaraciye_ecommerce</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Home</a>
-                            }
-                            else
-                            {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            }
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="Index">
-                                🛒 Sepetim <span class="badge bg-danger">@ViewBag.CartItemCount</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" role="button" data-bs-toggle="collapse" href="#filterPanel"
-                                aria-expanded="false" aria-controls="filterPanel">
-                                Filtrele
-                            </a>
-                        </li>
+        <!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+    <div class="container">
+        <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-bag-check-fill"></i> Cansaraciye
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-action="Orders" asp-controller="Order">Siparişlerim</a>
-                            </li>
-                        }
+        <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="nav-link" asp-controller="Admin" asp-action="Index">
+                            <i class="bi bi-house-door-fill"></i> Yönetim
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house-door-fill"></i> Ana Sayfa
+                        </a>
+                    }
+                </li>
+                @* <li class="nav-item">
+                    <a class="nav-link" asp-controller="Home" asp-action="Privacy">
+                        <i class="bi bi-shield-lock-fill"></i> Gizlilik
+                    </a>
+                </li> *@
+                <li class="nav-item">
+                    <a class="nav-link position-relative" asp-controller="ShoppingCart" asp-action="Index">
+    <i class="bi bi-cart-fill"></i> Sepetim
+    @await Html.PartialAsync("_CartCountPartial")
+</a>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="About" asp-action="Index">Hakkımızda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Contact" asp-action="Index">İletişim</a>
-                        </li>   
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" role="button" data-bs-toggle="collapse" href="#filterPanel"
+                       aria-expanded="false" aria-controls="filterPanel">
+                        <i class="bi bi-funnel-fill"></i> Filtrele
+                    </a>
+                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Orders" asp-controller="Order">
+                            <i class="bi bi-box-seam"></i> Siparişlerim
+                        </a>
+                    </li>
+                }
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="About" asp-action="Index">
+                        <i class="bi bi-info-circle-fill"></i> Hakkımızda
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Contact" asp-action="Index">
+                        <i class="bi bi-envelope-fill"></i> İletişim
+                    </a>
+                </li>
+            </ul>
 
-                    </ul>
-                    <partial name="_LoginPartial" />
+            <!-- Giriş/Kayıt kısmı -->
+            <partial name="_LoginPartial" />
+        </div>
+    </div>
+</nav>
+
+    </header>
+    <main class="flex-grow-1">
+        <div class="container pb-3">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light pt-4 pb-3 mt-5 border-top shadow-sm">
+    <div class="container">
+        <div class="row">
+            <!-- Firma Açıklama -->
+            <div class="col-md-3 mb-3">
+                <h5 class="fw-bold">Cansaraciye</h5>
+                <p style="font-size: 0.9rem;">
+                    Sırt çantası, valiz ve kurye çantası imalatında öncü firmayız. Hem perakende hem toptan satış yapıyoruz. Kalite ve müşteri memnuniyeti önceliğimizdir.
+                </p>
+            </div>
+
+            <!-- Hızlı Bağlantılar -->
+            <div class="col-md-3 mb-3">
+                <h6 class="fw-bold">Hızlı Bağlantılar</h6>
+                <ul class="list-unstyled">
+                    <li><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-light">Ana Sayfa</a></li>
+                    <li><a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-light">Gizlilik Politikası</a></li>
+                    <li><a asp-controller="Contact" asp-action="Index" class="text-decoration-none text-light">İletişim</a></li>
+                    <li><a asp-controller="About" asp-action="Index" class="text-decoration-none text-light">Hakkımızda</a></li>
+                </ul>
+            </div>
+
+            <!-- İletişim -->
+            <div class="col-md-3 mb-3">
+                <h6 class="fw-bold">İletişim</h6>
+                <p style="font-size: 0.9rem;">
+                    📍 İstanbul, Türkiye<br />
+                    📞 +90 555 123 45 67<br />
+                    ✉️ info@cansaraciye.com
+                </p>
+            </div>
+
+            <!-- Sosyal Medya -->
+            <div class="col-md-3 mb-3">
+                <h6 class="fw-bold">Sosyal Medya</h6>
+                <div class="d-flex flex-column gap-2">
+                    <a href="https://facebook.com" class="btn btn-outline-light btn-sm text-start" target="_blank">
+                        <i class="bi bi-facebook me-2"></i> Facebook
+                    </a>
+                    <a href="https://instagram.com" class="btn btn-outline-light btn-sm text-start" target="_blank">
+                        <i class="bi bi-instagram me-2"></i> Instagram
+                    </a>
+                    <a href="https://linkedin.com" class="btn btn-outline-light btn-sm text-start" target="_blank">
+                        <i class="bi bi-linkedin me-2"></i> LinkedIn
+                    </a>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - cansaraciye_ecommerce - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+
+        <div class="text-center pt-3 border-top mt-3" style="font-size: 0.85rem;">
+            &copy; 2025 Cansaraciye - Tüm hakları saklıdır.
+        </div>
+    </div>
+</footer>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

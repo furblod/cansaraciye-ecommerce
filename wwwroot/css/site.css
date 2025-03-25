@@ -16,14 +16,22 @@ html {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
 }
+
+main {
+  flex: 1;
+}
+
 
 .product-card {
   border: 1px solid #ddd;
@@ -62,10 +70,10 @@ body {
 }
 
 
-.btn {
+/* .btn {
   padding: 5px 10px;
   font-size: 14px;
-}
+} */
 
 .product-img {
   transition: transform 0.4s ease;

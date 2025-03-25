@@ -1,0 +1,22 @@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@inject cansaraciye_ecommerce.Data.ApplicationDbContext DbContext
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var cartCount = 0;
+
+    if (user != null)
+    {
+        cartCount = DbContext.ShoppingCartItems
+        .Where(i => i.UserId == user.Id)
+        .Sum(i => i.Quantity);
+    }
+}
+
+@if (cartCount > 0)
+{
+    <span class="position-absolute top-5 start-100 translate-middle badge rounded-circle bg-danger"
+        style="font-size: 0.65rem; min-width: 18px; height: 18px;">
+        @cartCount
+    </span>
+}

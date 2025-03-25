@@ -6,21 +6,24 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profil</a>
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="bi bi-person-circle"></i> Profil
+            </a>
         </li>
         <li class="nav-item">
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Çıkış Yap</button>
-            </form>
+            <a class="nav-link text-light" href="#" onclick="document.getElementById('logoutForm').submit(); return false;">
+                <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+            </a>
+            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-none"></form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Kayıt Ol</a>
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Register">Kayıt Ol</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Giriş Yap</a>
+            <a class="nav-link text-light" asp-area="Identity" asp-page="/Account/Login">Giriş Yap</a>
         </li>
     }
 </ul>

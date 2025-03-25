@@ -1,24 +1,38 @@
 ﻿@page
 @model PersonalDataModel
 @{
-    ViewData["Title"] = "Personal Data";
+    ViewData["Title"] = "Kişisel Veriler";
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h4 class="fw-bold mb-3">Kişisel Veriler</h4>
 
-<div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
-        <form id="download-data" asp-page="DownloadPersonalData" method="post">
-            <button class="btn btn-primary" type="submit">Download</button>
-        </form>
-        <p>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
-        </p>
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Dikkat:</strong> Bu sayfa, hesabınıza ait tüm kişisel verileri indirmenize veya
+                        hesabınızı kalıcı olarak silmenize olanak tanır.
+                    </div>
+
+                    <p class="mb-4 text-muted">
+                        Aşağıdaki seçenekler ile hesabınıza ait verileri indirebilir ya da hesabınızı silebilirsiniz.
+                        <br />
+                        <strong>Silme işlemi geri alınamaz!</strong>
+                    </p>
+
+                    @* <form method="post" asp-page-handler="Download">
+                        <button type="submit" class="btn btn-outline-primary me-2">Verileri İndir</button>
+                    </form> *@
+
+                    <form method="post" asp-page-handler="Delete" class="mt-3">
+                        <button type="submit" class="btn btn-danger">Hesabı Kalıcı Olarak Sil</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

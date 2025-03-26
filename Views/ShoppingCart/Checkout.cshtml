@@ -4,47 +4,77 @@
     ViewData["Title"] = "Ödeme Sayfası";
 }
 
-<h2>Ödeme Bilgilerini Girin</h2>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow rounded-4 border-0">
+                <div class="card-body p-5">
+                    <h3 class="mb-4 fw-bold text-center">Ödeme Bilgileri</h3>
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Error"]</div>
+                    }
 
-<form method="post" action="/ShoppingCart/CheckoutProcess">
-    <div class="form-group">
-        <label>Ad Soyad</label>
-        <input type="text" name="FullName" class="form-control" value="@Model.FullName" required />
+                    <form method="post" action="/ShoppingCart/CheckoutProcess">
+                        <div class="mb-3">
+                            <label class="form-label">Ad Soyad</label>
+                            <input type="text" name="FullName" class="form-control" value="@Model.FullName" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Adres</label>
+                            <input type="text" name="Address" class="form-control" value="@Model.Address" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Şehir</label>
+                            <input type="text" name="City" class="form-control" value="@Model.City" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Telefon</label>
+                            <input type="text" name="PhoneNumber" class="form-control" value="@Model.PhoneNumber"
+                                required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Toplam Tutar (TL)</label>
+                            <input type="text" name="TotalAmount" class="form-control bg-light fw-bold"
+                                value="@(Model.TotalAmount > 0 ? Model.TotalAmount.ToString("F2") : "HATA")" readonly
+                                required />
+                        </div>
+
+                        <hr class="my-4">
+                        <h5 class="mb-3">Kart Bilgileri</h5>
+
+                        <div class="mb-3">
+                            <label class="form-label">Kart Numarası</label>
+                            <input type="text" name="CardNumber" class="form-control" required />
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label">Son Kullanma Ay (AA)</label>
+                                <input type="text" name="ExpireMonth" class="form-control" placeholder="AA" required />
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Son Kullanma Yıl (YYYY)</label>
+                                <input type="text" name="ExpireYear" class="form-control" placeholder="YYYY" required />
+                            </div>
+                            <div class="col">
+                                <label class="form-label">CVC</label>
+                                <input type="text" name="CVC" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-dark py-2 fw-semibold">Ödemeyi Tamamla</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label>Adres</label>
-        <input type="text" name="Address" class="form-control" value="@Model.Address" required />
-    </div>
-    <div class="form-group">
-        <label>Şehir</label>
-        <input type="text" name="City" class="form-control" value="@Model.City" required />
-    </div>
-    <div class="form-group">
-        <label>Telefon</label>
-        <input type="text" name="PhoneNumber" class="form-control" value="@Model.PhoneNumber" required />
-    </div>
-    <div class="form-group">
-        <label>Toplam Tutar (TL)</label>
-        <input type="text" name="TotalAmount" class="form-control"
-            value="@(Model.TotalAmount > 0 ? Model.TotalAmount.ToString("F2") : "HATA")" readonly required />
-    </div>
-    <div class="form-group">
-        <label>Kart Numarası</label>
-        <input type="text" name="CardNumber" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Son Kullanma Tarihi (Ay/Yıl)</label>
-        <input type="text" name="ExpireMonth" class="form-control" placeholder="AA" required />
-        <input type="text" name="ExpireYear" class="form-control" placeholder="YYYY" required />
-    </div>
-    <div class="form-group">
-        <label>CVC</label>
-        <input type="text" name="CVC" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Ödemeyi Tamamla</button>
-</form>
+</div>

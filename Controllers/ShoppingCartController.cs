@@ -105,7 +105,7 @@ namespace cansaraciye_ecommerce.Controllers
 
             if (cartItems == null || !cartItems.Any())
             {
-                TempData["Error"] = "Sepetiniz boş!";
+                TempData["Error"] = "Sepetiniz boş! Spiariş oluşturamazsınız";
                 return RedirectToAction("Index", "ShoppingCart");
             }
 

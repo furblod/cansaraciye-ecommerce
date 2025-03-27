@@ -120,7 +120,7 @@ namespace cansaraciye_ecommerce.Controllers
             {
                 FullName = userProfile != null ? $"{userProfile.FirstName} {userProfile.LastName}" : "Ad Soyad Girilmedi",
                 Address = userProfile?.Address ?? "Adres Girilmedi",
-                City = "İstanbul",
+                City = "",
                 PhoneNumber = userProfile?.PhoneNumber ?? "0000000000",
                 TotalAmount = totalAmount  // **Toplam Tutar Artık Boş Gelmeyecek**
             };

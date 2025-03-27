@@ -1,50 +1,94 @@
 @model cansaraciye_ecommerce.Models.Order
 
-<h2>Sipariş Detayı</h2>
+@{
+    ViewData["Title"] = "Sipariş Detayı";
+}
 
-<p><strong>Sipariş No:</strong> @Model.Id</p>
-<p><strong>Kullanıcı Adı:</strong> @Model.FullName</p>
-<p><strong>Kullanıcı ID:</strong> @Model.UserId</p>
-<p><strong>Tarih:</strong> @Model.OrderDate.ToShortDateString()</p>
-<p><strong>Adres:</strong> @Model.Address</p>
-<form method="post" asp-action="UpdateOrderStatus" asp-controller="Admin">
-    <input type="hidden" name="orderId" value="@Model.Id" />
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body px-4 py-5">
+            <h3 class="fw-bold mb-4 text-center">📑 Sipariş Detayı</h3>
 
-    <label><strong>Durumu Güncelle:</strong></label>
-    <select name="status" class="form-control">
-        <option value="Onay Bekleniyor" selected="@(Model.Status == "Onay Bekleniyor" ? "selected" : null)">Onay
-            Bekleniyor</option>
-        <option value="Onaylandı" selected="@(Model.Status == "Onaylandı" ? "selected" : null)">Onaylandı</option>
-        <option value="Kargoya Verildi" selected="@(Model.Status == "Kargoya Verildi" ? "selected" : null)">Kargoya
-            Verildi</option>
-        <option value="Teslim Edildi" selected="@(Model.Status == "Teslim Edildi" ? "selected" : null)">Teslim Edildi
-        </option>
-        <option value="İptal Edildi" selected="@(Model.Status == "İptal Edildi" ? "selected" : null)">İptal Edildi
-        </option>
-    </select>
+            <!-- Sipariş Bilgileri -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="bg-light p-3 rounded-3 shadow-sm">
+                        <p><strong>Sipariş No:</strong> @Model.Id</p>
+                        <p><strong>Kullanıcı ID:</strong> @Model.UserId</p>
+                        <p><strong>Tarih:</strong> @Model.OrderDate.ToString("dd.MM.yyyy")</p>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="bg-light p-3 rounded-3 shadow-sm">
+                        <p><strong>Kullanıcı:</strong> @Model.FullName</p>
+                        <p><strong>Adres:</strong> @Model.Address</p>
 
-    <button type="submit" class="btn btn-primary mt-2">Durumu Güncelle</button>
-</form>
+                        <!-- Durum Güncelleme -->
+                        <form method="post" asp-action="UpdateOrderStatus" asp-controller="Admin" class="mt-3">
+                            <input type="hidden" name="orderId" value="@Model.Id" />
+                            <label class="form-label"><strong>Sipariş Durumu</strong></label>
+                            <div class="d-flex gap-2">
+                                <select name="status" class="form-select" style="max-width: 250px;">
+                                    <option value="Onay Bekleniyor"
+                                        selected="@(Model.Status == "Onay Bekleniyor" ? "selected" : null)">Onay
+                                        Bekleniyor</option>
+                                    <option value="Onaylandı"
+                                        selected="@(Model.Status == "Onaylandı" ? "selected" : null)">Onaylandı</option>
+                                    <option value="Kargoya Verildi"
+                                        selected="@(Model.Status == "Kargoya Verildi" ? "selected" : null)">Kargoya
+                                        Verildi</option>
+                                    <option value="Teslim Edildi"
+                                        selected="@(Model.Status == "Teslim Edildi" ? "selected" : null)">Teslim Edildi
+                                    </option>
+                                    <option value="İptal Edildi"
+                                        selected="@(Model.Status == "İptal Edildi" ? "selected" : null)">İptal Edildi
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-dark">Güncelle</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-<h3>Ürünler:</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Ürün</th>
-            <th>Adet</th>
-            <th>Fiyat</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderItems)
-        {
-            <tr>
-                <td>@item.Product.Name</td>
-                <td>@item.Quantity</td>
-                <td>@item.TotalPrice ₺</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <!-- Ürün Listesi -->
+            <h5 class="fw-semibold mb-3">🛒 Sipariş Ürünleri</h5>
+            <table class="table table-hover text-center align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Görsel</th>
+                        <th>Ürün</th>
+                        <th>Adet</th>
+                        <th>Birim Fiyat</th>
+                        <th>Toplam</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })">
+                                    <img src="@item.Product.ImageUrl" alt="@item.Product.Name" width="60" height="60"
+                                        style="object-fit: cover; border-radius: 0.5rem;" />
+                                </a>
+                            </td>
+                            <td class="fw-medium"><a
+                                    href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })"
+                                    class="text-decoration-none" style="color: black;">@item.Product.Name</a></td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Product.Price.ToString("C")</td>
+                            <td class="fw-semibold">@item.TotalPrice.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
-<a asp-action="Orders" class="btn btn-secondary">Geri Dön</a>
+            <div class="d-flex justify-content-end mt-4">
+                <a asp-action="Orders" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Geri Dön
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

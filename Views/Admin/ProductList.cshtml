@@ -4,48 +4,65 @@
     ViewData["Title"] = "Ürün Listesi";
 }
 
-<h2>Ürün Listesi</h2>
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body px-4 py-5">
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Ürün Adı</th>
-            <th>Kategori</th>
-            <th>Fiyat</th>
-            <th>Stok</th>
-            <th>Görsel</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.Id</td>
-                <td>@product.Name</td>
-                <td>@(product.Category != null ? product.Category.Name : "Bilinmiyor")</td>
-                <td>@product.Price.ToString("C")</td>
-                <td>@product.Stock</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(product.ImageUrl))
-                    {
-                        <img src="@product.ImageUrl" alt="@product.Name" style="width: 100px; height: auto;" />
-                    }
-                    else
-                    {
-                        <span>Resim Yok</span>
-                    }
-                </td>
-                <td>
-                    <a class="btn btn-primary" asp-controller="Admin" asp-action="EditProduct"
-                        asp-route-id="@product.Id">Düzenle</a>
-                    <a class="btn btn-danger" asp-controller="Admin" asp-action="DeleteProduct" asp-route-id="@product.Id"
-                        onclick="return confirm('Silmek istediğinize emin misiniz?');">Sil</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold mb-0">📦 Ürün Listesi</h3>
+                <a class="btn btn-success" asp-controller="Admin" asp-action="CreateProduct">
+                    <i class="bi bi-plus-circle me-1"></i>Yeni Ürün Ekle
+                </a>
+            </div>
 
-<a class="btn btn-success" asp-controller="Admin" asp-action="CreateProduct">Yeni Ürün Ekle</a>
+            <table class="table table-hover align-middle text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Ürün</th>
+                        <th>Kategori</th>
+                        <th>Fiyat</th>
+                        <th>Stok</th>
+                        <th>Görsel</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@product.Id</td>
+                            <td>@product.Name</td>
+                            <td>@(product.Category != null ? product.Category.Name : "Bilinmiyor")</td>
+                            <td>@product.Price.ToString("C")</td>
+                            <td>@product.Stock</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(product.ImageUrl))
+                                {
+                                    <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail"
+                                        style="width: 80px; height: auto;" />
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Resim Yok</span>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary me-1" asp-controller="Admin"
+                                    asp-action="EditProduct" asp-route-id="@product.Id">
+                                    <i class="bi bi-pencil-square"></i> Düzenle
+                                </a>
+                                <a class="btn btn-sm btn-outline-danger" asp-controller="Admin" asp-action="DeleteProduct"
+                                    asp-route-id="@product.Id"
+                                    onclick="return confirm('Silmek istediğinize emin misiniz?');">
+                                    <i class="bi bi-trash3"></i> Sil
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

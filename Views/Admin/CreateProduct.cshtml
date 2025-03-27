@@ -4,51 +4,62 @@
     ViewData["Title"] = "Yeni Ürün Ekle";
 }
 
-<h2>Yeni Ürün Ekle</h2>
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body px-4 py-5">
+            <h3 class="fw-bold mb-4 text-center">🆕 Yeni Ürün Ekle</h3>
 
-<form asp-controller="Admin" asp-action="CreateProduct" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label>Ürün Adı</label>
-        <input asp-for="Name" class="form-control" required />
+            <form asp-controller="Admin" asp-action="CreateProduct" method="post" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label class="form-label">Ürün Adı</label>
+                    <input asp-for="Name" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Açıklama</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Fiyat</label>
+                        <input asp-for="Price" type="number" step="0.01" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Stok Miktarı</label>
+                        <input asp-for="Stock" type="number" min="0" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ana Ürün Görseli</label>
+                    <input type="file" name="MainImage" class="form-control" accept="image/*" required />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ekstra Ürün Görselleri</label>
+                    <input type="file" name="ExtraImages" class="form-control" accept="image/*" multiple />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Kategori</label>
+                    <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"
+                        class="form-select" required>
+                        <option value="">Kategori Seçin</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-dark px-4">
+                        <i class="bi bi-save2 me-1"></i>Kaydet
+                    </button>
+                    <a asp-controller="Admin" asp-action="ProductList" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>Geri
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label>Açıklama</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
-
-    <div class="form-group">
-        <label>Fiyat</label>
-        <input asp-for="Price" type="number" step="0.01" class="form-control" required />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Stok Miktarı</label>
-        <input type="number" class="form-control" asp-for="Stock" min="0" required />
-    </div>
-
-    <!-- ✅ Ana görsel yükleme -->
-    <div class="form-group">
-        <label>Ana Ürün Görseli</label>
-        <input type="file" name="MainImage" class="form-control" accept="image/*" required />
-    </div>
-
-    <!-- ✅ Çoklu görsel yükleme -->
-    <div class="form-group">
-        <label>Ekstra Ürün Görselleri</label>
-        <input type="file" name="ExtraImages" class="form-control" accept="image/*" multiple />
-    </div>
-
-    <div class="form-group">
-        <label>Kategori</label>
-        <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"
-            class="form-control" required>
-            <option value="">Kategori Seçin</option>
-        </select>
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Kaydet</button>
-</form>
-
-<a class="btn btn-secondary" asp-controller="Admin" asp-action="ProductList">Geri</a>
+</div>

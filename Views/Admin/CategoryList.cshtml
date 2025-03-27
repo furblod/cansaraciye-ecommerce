@@ -4,29 +4,47 @@
     ViewData["Title"] = "Kategori Listesi";
 }
 
-<h2>Kategoriler</h2>
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body px-4 py-5">
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Kategori Adı</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var category in Model)
-        {
-            <tr>
-                <td>@category.Id</td>
-                <td>@category.Name</td>
-                <td>
-                    <a class="btn btn-primary" asp-controller="Admin" asp-action="EditCategory" asp-route-id="@category.Id">Düzenle</a>
-                    <a class="btn btn-danger" asp-controller="Admin" asp-action="DeleteCategory" asp-route-id="@category.Id" onclick="return confirm('Silmek istediğinize emin misiniz?');">Sil</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold mb-0">📂 Kategori Listesi</h3>
+                <a class="btn btn-success" asp-controller="Admin" asp-action="CreateCategory">
+                    <i class="bi bi-plus-circle me-1"></i>Yeni Kategori Ekle
+                </a>
+            </div>
 
-<a class="btn btn-success" asp-controller="Admin" asp-action="CreateCategory">Yeni Kategori Ekle</a>
+            <table class="table table-hover align-middle text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Kategori Adı</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@category.Id</td>
+                            <td>@category.Name</td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary me-1" asp-controller="Admin"
+                                    asp-action="EditCategory" asp-route-id="@category.Id">
+                                    <i class="bi bi-pencil-square"></i> Düzenle
+                                </a>
+                                <a class="btn btn-sm btn-outline-danger" asp-controller="Admin" asp-action="DeleteCategory"
+                                    asp-route-id="@category.Id"
+                                    onclick="return confirm('Silmek istediğinize emin misiniz?');">
+                                    <i class="bi bi-trash3"></i> Sil
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

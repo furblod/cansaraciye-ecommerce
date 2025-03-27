@@ -1,71 +1,102 @@
 @model List<cansaraciye_ecommerce.Models.Order>
+@{
+    ViewData["Title"] = "Sipariş Yönetimi";
+}
 
-<h2>Sipariş Yönetimi</h2>
-<!-- 📌 Filtreleme ve Sıralama Formu -->
-<form method="get" class="mb-4">
-    <div class="row">
-        <!-- Duruma Göre Filtreleme -->
-        <div class="col-md-4">
-            <label>Sipariş Durumu:</label>
-            <select name="statusFilter" class="form-control" onchange="this.form.submit()">
-                <option value="Tümü" selected="@(ViewBag.StatusFilter == "Tümü" ? "selected" : null)">Tümü</option>
-                <option value="Onay Bekleniyor"
-                    selected="@(ViewBag.StatusFilter == "Onay Bekleniyor" ? "selected" : null)">Onay Bekleniyor</option>
-                <option value="Onaylandı" selected="@(ViewBag.StatusFilter == "Onaylandı" ? "selected" : null)">
-                    Onaylandı</option>
-                <option value="Kargoya Verildi"
-                    selected="@(ViewBag.StatusFilter == "Kargoya Verildi" ? "selected" : null)">Kargoya Verildi</option>
-                <option value="Teslim Edildi" selected="@(ViewBag.StatusFilter == "Teslim Edildi" ? "selected" : null)">
-                    Teslim Edildi</option>
-                <option value="İptal Edildi" selected="@(ViewBag.StatusFilter == "İptal Edildi" ? "selected" : null)">
-                    İptal Edildi</option>
-            </select>
-        </div>
+<div class="container py-4">
+    <div class="card shadow border-0 rounded-4 mb-4">
+        <div class="card-body px-4 py-4">
+            <h3 class="fw-bold mb-4">📦 Sipariş Yönetimi</h3>
 
-        <!-- Tarihe Göre Sıralama -->
-        <div class="col-md-4">
-            <label>Tarihe Göre Sırala:</label>
-            <select name="sortOrder" class="form-control" onchange="this.form.submit()">
-                <option value="newest" selected="@(ViewBag.SortOrder == "newest" ? "selected" : null)">En Yeni Önce
-                </option>
-                <option value="oldest" selected="@(ViewBag.SortOrder == "oldest" ? "selected" : null)">En Eski Önce
-                </option>
-            </select>
-        </div>
+            <!-- Filtre Formu -->
+            <form method="get" class="mb-3">
+                <div class="row g-3">
+                    <!-- Durum Filtresi -->
+                    <div class="col-md-4">
+                        <label class="form-label">Sipariş Durumu</label>
+                        <select name="statusFilter" class="form-select" onchange="this.form.submit()">
+                            <option value="Tümü" selected="@(ViewBag.StatusFilter == "Tümü" ? "selected" : null)">Tümü
+                            </option>
+                            <option value="Onay Bekleniyor"
+                                selected="@(ViewBag.StatusFilter == "Onay Bekleniyor" ? "selected" : null)">Onay
+                                Bekleniyor</option>
+                            <option value="Onaylandı"
+                                selected="@(ViewBag.StatusFilter == "Onaylandı" ? "selected" : null)">Onaylandı</option>
+                            <option value="Kargoya Verildi"
+                                selected="@(ViewBag.StatusFilter == "Kargoya Verildi" ? "selected" : null)">Kargoya
+                                Verildi</option>
+                            <option value="Teslim Edildi"
+                                selected="@(ViewBag.StatusFilter == "Teslim Edildi" ? "selected" : null)">Teslim Edildi
+                            </option>
+                            <option value="İptal Edildi"
+                                selected="@(ViewBag.StatusFilter == "İptal Edildi" ? "selected" : null)">İptal Edildi
+                            </option>
+                        </select>
+                    </div>
 
-        <!-- Filtreleme Butonu -->
-        <div class="col-md-4 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+                    <!-- Tarih Sıralama -->
+                    <div class="col-md-4">
+                        <label class="form-label">Tarihe Göre Sıralama</label>
+                        <select name="sortOrder" class="form-select" onchange="this.form.submit()">
+                            <option value="newest" selected="@(ViewBag.SortOrder == "newest" ? "selected" : null)">En
+                                Yeni Önce</option>
+                            <option value="oldest" selected="@(ViewBag.SortOrder == "oldest" ? "selected" : null)">En
+                                Eski Önce</option>
+                        </select>
+                    </div>
+
+                    <!-- Buton -->
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-dark w-100"><i
+                                class="bi bi-funnel me-1"></i>Filtrele</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</form>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Sipariş No</th>
-            <th>Kullanıcı Adı</th>
-            <th>Tarih</th>
-            <th>Toplam Fiyat</th>
-            <th>Durum</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>@order.Id</td>
-                <td>@order.FullName</td>
-                <td>@order.OrderDate.ToShortDateString()</td>
-                <td>@order.OrderItems.Sum(i => i.TotalPrice) ₺</td>
-                <td>@order.Status</td>
-                <td>
-                    <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-info">Detaylar</a>
-                    <a asp-action="DeleteOrder" asp-route-id="@order.Id" class="btn btn-danger">Sil</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Sipariş Listesi -->
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body px-4 py-4">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Sipariş No</th>
+                            <th>Kullanıcı</th>
+                            <th>Tarih</th>
+                            <th>Toplam Fiyat</th>
+                            <th>Durum</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td class="fw-semibold">#@order.Id</td>
+                                <td>@order.FullName</td>
+                                <td>@order.OrderDate.ToString("dd.MM.yyyy")</td>
+                                <td>@order.OrderItems.Sum(i => i.TotalPrice).ToString("C")</td>
+                                <td>
+                                    <span class="badge bg-secondary">@order.Status</span>
+                                </td>
+                                <td>
+                                    <a asp-action="OrderDetails" asp-route-id="@order.Id"
+                                        class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="bi bi-eye"></i> Detaylar
+                                    </a>
+                                    <a asp-action="DeleteOrder" asp-route-id="@order.Id"
+                                        class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Bu siparişi silmek istediğinize emin misiniz?');">
+                                        <i class="bi bi-trash"></i> Sil
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

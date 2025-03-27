@@ -4,15 +4,27 @@
     ViewData["Title"] = "Yeni Kategori Ekle";
 }
 
-<h2>Yeni Kategori Ekle</h2>
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body px-4 py-5">
+            <h3 class="fw-bold mb-4 text-center">📁 Yeni Kategori Ekle</h3>
 
-<form asp-controller="Admin" asp-action="CreateCategory" method="post">
-    <div class="form-group">
-        <label>Kategori Adı</label>
-        <input asp-for="Name" class="form-control" required />
-        <span asp-validation-for="Name" class="text-danger"></span>
+            <form asp-controller="Admin" asp-action="CreateCategory" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Kategori Adı</label>
+                    <input asp-for="Name" class="form-control" required />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-plus-circle me-1"></i>Kaydet
+                    </button>
+                    <a asp-controller="Admin" asp-action="CategoryList" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>Geri
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-success">Kaydet</button>
-</form>
-
-<a class="btn btn-secondary" asp-controller="Admin" asp-action="CategoryList">Geri</a>
+</div>

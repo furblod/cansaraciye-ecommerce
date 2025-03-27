@@ -46,10 +46,14 @@
                     {
                         <tr>
                             <td>
-                                <img src="@item.Product.ImageUrl" alt="@item.Product.Name" width="60" height="60"
-                                    style="object-fit: cover; border-radius: 0.5rem;" />
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })">
+                                    <img src="@item.Product.ImageUrl" alt="@item.Product.Name" width="60" height="60"
+                                        style="object-fit: cover; border-radius: 0.5rem;" />
+                                </a>
                             </td>
-                            <td class="fw-medium">@item.Product.Name</td>
+                            <td class="fw-medium"><a
+                                    href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })"
+                                    class="text-decoration-none" style="color: black;">@item.Product.Name</a></td>
                             <td>@item.Quantity</td>
                             <td>@item.Product.Price.ToString("C")</td>
                             <td class="fw-semibold">@item.TotalPrice.ToString("C")</td>

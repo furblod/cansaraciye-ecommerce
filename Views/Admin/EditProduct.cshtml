@@ -1,82 +1,92 @@
 @model cansaraciye_ecommerce.Models.Product
 
-<h2>Ürün Düzenle</h2>
+@{
+    ViewData["Title"] = "Ürün Düzenle";
+}
 
-<form asp-action="EditProduct" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body px-4 py-5">
+            <h3 class="fw-bold mb-4 text-center">🛠️ Ürün Düzenle</h3>
 
-    <div class="form-group">
-        <label>Ürün Adı</label>
-        <input asp-for="Name" class="form-control" required />
-    </div>
+            <form asp-action="EditProduct" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" />
 
-    <div class="form-group">
-        <label>Açıklama</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
-
-    <div class="form-group">
-        <label>Fiyat</label>
-        <input asp-for="Price" type="number" step="0.01" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label>Stok</label>
-        <input asp-for="Stock" type="number" class="form-control" min="0" required />
-    </div>
-
-    <!-- Ana görsel ve silme -->
-    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-    {
-        <div class="mb-2 position-relative" style="display:inline-block;">
-            <label>Mevcut Ana Görsel</label><br />
-            <img src="@Model.ImageUrl" width="120" class="img-thumbnail mb-2" />
-
-            <!-- Ana görseli silmek için GET -->
-            <a asp-action="DeleteMainImage" asp-controller="Admin" asp-route-productId="@Model.Id"
-                onclick="return confirm('Ana görsel silinsin mi?')"
-                class="btn btn-sm btn-danger rounded-circle px-2 py-1 position-absolute"
-                style="top: -6px; right: -6px; z-index:5;">×</a>
-        </div>
-    }
-
-    <div class="form-group">
-        <label>Yeni Ana Görsel (değiştirmek istersen)</label>
-        <input type="file" name="MainImage" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label>Yeni Ekstra Görseller</label>
-        <input type="file" name="ExtraImages" class="form-control" multiple />
-    </div>
-
-    <!-- Mevcut ekstra görseller ve silme -->
-    @if (Model.ProductImages != null && Model.ProductImages.Any())
-    {
-        <label>Mevcut Ekstra Görseller</label>
-        <div class="d-flex gap-2 flex-wrap mb-3">
-            @foreach (var img in Model.ProductImages)
-            {
-                <div class="position-relative" style="width: 80px;">
-                    <img src="@img.ImageUrl" class="img-thumbnail" style="width: 100%;" />
-
-                    <a asp-action="DeleteProductImage" asp-controller="Admin" asp-route-id="@img.Id"
-                        onclick="return confirm('Bu görsel silinsin mi?')"
-                        class="btn btn-sm btn-danger rounded-circle px-2 py-1 position-absolute"
-                        style="top: -6px; right: -6px; z-index:5;">×</a>
+                <div class="mb-3">
+                    <label class="form-label">Ürün Adı</label>
+                    <input asp-for="Name" class="form-control" required />
                 </div>
-            }
+
+                <div class="mb-3">
+                    <label class="form-label">Açıklama</label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Fiyat</label>
+                        <input asp-for="Price" type="number" step="0.01" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Stok</label>
+                        <input asp-for="Stock" type="number" min="0" class="form-control" required />
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="mb-3">
+                        <label class="form-label d-block">Mevcut Ana Görsel</label>
+                        <div class="position-relative d-inline-block">
+                            <img src="@Model.ImageUrl" class="img-thumbnail" style="width: 120px;" />
+                            <a asp-action="DeleteMainImage" asp-controller="Admin" asp-route-productId="@Model.Id"
+                                onclick="return confirm('Ana görsel silinsin mi?')"
+                                class="btn btn-sm btn-danger rounded-circle px-2 py-1 position-absolute"
+                                style="top: -6px; right: -6px; z-index:5;">×</a>
+                        </div>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label">Yeni Ana Görsel (değiştirmek istersen)</label>
+                    <input type="file" name="MainImage" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Yeni Ekstra Görseller</label>
+                    <input type="file" name="ExtraImages" class="form-control" multiple />
+                </div>
+
+                @if (Model.ProductImages != null && Model.ProductImages.Any())
+                {
+                    <label class="form-label">Mevcut Ekstra Görseller</label>
+                    <div class="d-flex gap-2 flex-wrap mb-3">
+                        @foreach (var img in Model.ProductImages)
+                        {
+                            <div class="position-relative" style="width: 80px;">
+                                <img src="@img.ImageUrl" class="img-thumbnail" style="width: 100%;" />
+                                <a asp-action="DeleteProductImage" asp-controller="Admin" asp-route-id="@img.Id"
+                                    onclick="return confirm('Bu görsel silinsin mi?')"
+                                    class="btn btn-sm btn-danger rounded-circle px-2 py-1 position-absolute"
+                                    style="top: -6px; right: -6px; z-index:5;">×</a>
+                            </div>
+                        }
+                    </div>
+                }
+
+                <div class="mb-4">
+                    <label class="form-label">Kategori</label>
+                    <select asp-for="CategoryId"
+                        asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))"
+                        class="form-select" required>
+                        <option value="">Kategori Seçin</option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-dark px-4">Kaydet</button>
+                    <a asp-action="ProductList" class="btn btn-outline-secondary">Geri</a>
+                </div>
+            </form>
         </div>
-    }
-
-    <div class="form-group">
-        <label>Kategori</label>
-        <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))"
-            class="form-control" required>
-            <option value="">Kategori Seçin</option>
-        </select>
     </div>
-
-    <button type="submit" class="btn btn-primary">Kaydet</button>
-    <a asp-action="ProductList" class="btn btn-secondary">Geri</a>
-</form>
+</div>

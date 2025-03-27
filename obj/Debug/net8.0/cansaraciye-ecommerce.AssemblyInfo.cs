@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("cansaraciye-ecommerce")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c187d74658b3e010d0c2c230d611266c06834fbf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+977578421483afc902d225bd2e1eed850602dd29")]
 [assembly: System.Reflection.AssemblyProductAttribute("cansaraciye-ecommerce")]
 [assembly: System.Reflection.AssemblyTitleAttribute("cansaraciye-ecommerce")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

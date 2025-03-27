@@ -78,9 +78,9 @@ using (var scope = app.Services.CreateScope())
             dbContext.UserProfiles.Add(new UserProfile
             {
                 UserId = user.Id,
-                FirstName = "Adınızı Girin",
-                LastName = "Soyadınızı Girin",
-                Address = "Adresinizi Girin",
+                FirstName = "",
+                LastName = "",
+                Address = "",
                 PhoneNumber = user.PhoneNumber ?? "" // Null kontrolü
             });
         }

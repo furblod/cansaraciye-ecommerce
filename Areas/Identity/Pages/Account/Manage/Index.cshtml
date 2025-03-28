@@ -30,9 +30,39 @@
                             <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="Input.Address" class="form-label">Adres</label>
+                            <label asp-for="Input.Address" class="form-label">Tam Adres</label>
                             <textarea asp-for="Input.Address" class="form-control" rows="3"></textarea>
                             <span asp-validation-for="Input.Address" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.City" class="form-label">İl</label>
+                            <input asp-for="Input.City" class="form-control" />
+                            <span asp-validation-for="Input.City" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.District" class="form-label">İlçe</label>
+                            <input asp-for="Input.District" class="form-control" />
+                            <span asp-validation-for="Input.District" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.Neighborhood" class="form-label">Mahalle</label>
+                            <input asp-for="Input.Neighborhood" class="form-control" />
+                            <span asp-validation-for="Input.Neighborhood" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.Street" class="form-label">Sokak</label>
+                            <input asp-for="Input.Street" class="form-control" />
+                            <span asp-validation-for="Input.Street" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.BuildingNo" class="form-label">Bina No</label>
+                            <input asp-for="Input.BuildingNo" class="form-control" />
+                            <span asp-validation-for="Input.BuildingNo" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Input.ApartmentNo" class="form-label">Daire No</label>
+                            <input asp-for="Input.ApartmentNo" class="form-control" />
+                            <span asp-validation-for="Input.ApartmentNo" class="text-danger"></span>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Bilgileri Güncelle</button>
                     </form>

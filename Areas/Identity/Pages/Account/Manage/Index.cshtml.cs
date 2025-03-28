@@ -47,6 +47,24 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Adres")]
             public string Address { get; set; }
+            [Display(Name = "İl")]
+            public string City { get; set; }
+
+            [Display(Name = "İlçe")]
+            public string District { get; set; }
+
+            [Display(Name = "Mahalle")]
+            public string Neighborhood { get; set; }
+
+            [Display(Name = "Sokak")]
+            public string Street { get; set; }
+
+            [Display(Name = "Bina No")]
+            public string BuildingNo { get; set; }
+
+            [Display(Name = "Daire No")]
+            public string ApartmentNo { get; set; }
+
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -64,8 +82,15 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
                 FirstName = userProfile.FirstName,
                 LastName = userProfile.LastName,
                 PhoneNumber = userProfile.PhoneNumber,
-                Address = userProfile.Address
+                Address = userProfile.Address,
+                City = userProfile.City,
+                District = userProfile.District,
+                Neighborhood = userProfile.Neighborhood,
+                Street = userProfile.Street,
+                BuildingNo = userProfile.BuildingNo,
+                ApartmentNo = userProfile.ApartmentNo
             };
+
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -104,6 +129,13 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account.Manage
             userProfile.LastName = Input.LastName;
             userProfile.PhoneNumber = Input.PhoneNumber;
             userProfile.Address = Input.Address;
+            userProfile.City = Input.City;
+            userProfile.District = Input.District;
+            userProfile.Neighborhood = Input.Neighborhood;
+            userProfile.Street = Input.Street;
+            userProfile.BuildingNo = Input.BuildingNo;
+            userProfile.ApartmentNo = Input.ApartmentNo;
+
 
             _context.UserProfiles.Update(userProfile);
             await _context.SaveChangesAsync();

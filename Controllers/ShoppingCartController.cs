@@ -119,11 +119,17 @@ namespace cansaraciye_ecommerce.Controllers
             var model = new CheckoutViewModel
             {
                 FullName = userProfile != null ? $"{userProfile.FirstName} {userProfile.LastName}" : "Ad Soyad Girilmedi",
-                Address = userProfile?.Address ?? "Adres Girilmedi",
-                City = "",
-                PhoneNumber = userProfile?.PhoneNumber ?? "0000000000",
-                TotalAmount = totalAmount  // **Toplam Tutar Artık Boş Gelmeyecek**
+                Address = userProfile?.Address ?? "",
+                City = userProfile?.City ?? "",
+                District = userProfile?.District ?? "",
+                Neighborhood = userProfile?.Neighborhood ?? "",
+                Street = userProfile?.Street ?? "",
+                BuildingNo = userProfile?.BuildingNo ?? "",
+                ApartmentNo = userProfile?.ApartmentNo ?? "",
+                PhoneNumber = userProfile?.PhoneNumber ?? "",
+                TotalAmount = totalAmount
             };
+
 
             return View(model);
         }
@@ -158,6 +164,11 @@ namespace cansaraciye_ecommerce.Controllers
                 FullName = model.FullName,
                 Address = model.Address,
                 City = model.City,
+                District = model.District,
+                Neighborhood = model.Neighborhood,
+                Street = model.Street,
+                BuildingNo = model.BuildingNo,
+                ApartmentNo = model.ApartmentNo,
                 PhoneNumber = model.PhoneNumber,
                 OrderDate = DateTime.Now,
                 OrderItems = new List<OrderItem>() // Sipariş ürünleri için boş liste başlat
@@ -226,6 +237,11 @@ namespace cansaraciye_ecommerce.Controllers
                 FullName = model.FullName,
                 Address = model.Address,
                 City = model.City,
+                District = model.District,
+                Neighborhood = model.Neighborhood,
+                Street = model.Street,
+                BuildingNo = model.BuildingNo,
+                ApartmentNo = model.ApartmentNo,
                 PhoneNumber = model.PhoneNumber,
                 OrderDate = DateTime.Now,
                 Status = "Onay Bekleniyor",

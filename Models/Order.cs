@@ -16,6 +16,20 @@ namespace cansaraciye_ecommerce.Models
 
         [Required(ErrorMessage = "Şehir gereklidir.")]
         public string? City { get; set; }
+        [Required]
+        public string District { get; set; }        // İlçe
+
+        [Required]
+        public string Neighborhood { get; set; }    // Mahalle
+
+        [Required]
+        public string Street { get; set; }          // Sokak
+
+        [Required]
+        public string BuildingNo { get; set; }      // Bina No
+
+        [Required]
+        public string? ApartmentNo { get; set; }     // Daire No
 
         [Required(ErrorMessage = "Telefon gereklidir.")]
         [Phone(ErrorMessage = "Geçerli bir telefon numarası giriniz.")]

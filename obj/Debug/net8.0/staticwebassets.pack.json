@@ -13,8 +13,16 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\04aad104-babf-4d0b-9a89-2b3198a98d38.jpg",
+      "PackagePath": "staticwebassets\\images\\04aad104-babf-4d0b-9a89-2b3198a98d38.jpg"
+    },
+    {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\0c03ee37-8fea-4b92-bbf8-947a61c24ba2.jpg",
       "PackagePath": "staticwebassets\\images\\0c03ee37-8fea-4b92-bbf8-947a61c24ba2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\0f57daa9-3c9d-41e7-8f27-3764b72f8146.jpg",
+      "PackagePath": "staticwebassets\\images\\0f57daa9-3c9d-41e7-8f27-3764b72f8146.jpg"
     },
     {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\12a0061e-7bb6-499b-81de-e836176a688a.jpg",
@@ -29,12 +37,20 @@
       "PackagePath": "staticwebassets\\images\\47887551-5400-4500-9d78-a122b89a3d28.jpg"
     },
     {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\552d5fa2-6c8f-401b-9fca-b6d620192dc4.jpg",
+      "PackagePath": "staticwebassets\\images\\552d5fa2-6c8f-401b-9fca-b6d620192dc4.jpg"
+    },
+    {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\836513a1-5ea1-43ca-9cc1-282a2961e350.jpg",
       "PackagePath": "staticwebassets\\images\\836513a1-5ea1-43ca-9cc1-282a2961e350.jpg"
     },
     {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\84d69402-eb85-433e-a4a7-83fe215ba949.jpg",
       "PackagePath": "staticwebassets\\images\\84d69402-eb85-433e-a4a7-83fe215ba949.jpg"
+    },
+    {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\9d8a0cf0-c6e8-4100-be2c-ea15f8777dc5.jpg",
+      "PackagePath": "staticwebassets\\images\\9d8a0cf0-c6e8-4100-be2c-ea15f8777dc5.jpg"
     },
     {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\a428a89a-10e9-4db9-b99e-1d804a1fdc71.jpg",
@@ -47,6 +63,10 @@
     {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\about-us.jpg",
       "PackagePath": "staticwebassets\\images\\about-us.jpg"
+    },
+    {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\afe93bfb-59d3-479d-ab16-738ec86fd1ff.jpg",
+      "PackagePath": "staticwebassets\\images\\afe93bfb-59d3-479d-ab16-738ec86fd1ff.jpg"
     },
     {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\bccbc510-bbcd-421d-9739-30b237e9bc52.jpg",
@@ -63,6 +83,10 @@
     {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\c46c20ec-afa6-4999-9064-be1bde82650c.jpg",
       "PackagePath": "staticwebassets\\images\\c46c20ec-afa6-4999-9064-be1bde82650c.jpg"
+    },
+    {
+      "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\cca191e9-20c7-4d4c-bd76-fc5d792a95a3.jpg",
+      "PackagePath": "staticwebassets\\images\\cca191e9-20c7-4d4c-bd76-fc5d792a95a3.jpg"
     },
     {
       "Id": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\d10ea07f-f9e1-4b0b-aa86-e80d8218f8c2.jpg",

@@ -22,6 +22,22 @@
     <meta property="og:image" content="/images/about-us.jpg">
 
 </head>
+<div id="cookieConsent" style="display:none; position: fixed; bottom: 10px; background-color: #eee; padding: 15px; border-radius: 5px; left: 10px; right: 10px; text-align: center; z-index: 1000;">
+    Bu site çerezleri, kullanıcı deneyimini artırmak için kullanır.
+    <button onclick="acceptCookies()">Kabul Et</button>
+</div>
+
+<script>
+    function acceptCookies() {
+        localStorage.setItem("cookieConsent", "accepted");
+        document.getElementById("cookieConsent").style.display = "none";
+    }
+
+    if (!localStorage.getItem("cookieConsent")) {
+        document.getElementById("cookieConsent").style.display = "block";
+    }
+</script>
+
 
 <body class="d-flex flex-column min-vh-100">
     <header>
@@ -123,6 +139,7 @@
                     <li><a asp-controller="Home" asp-action="Privacy" class="text-decoration-none text-light">Gizlilik Politikası</a></li>
                     <li><a asp-controller="Contact" asp-action="Index" class="text-decoration-none text-light">İletişim</a></li>
                     <li><a asp-controller="About" asp-action="Index" class="text-decoration-none text-light">Hakkımızda</a></li>
+                    <li><a asp-controller="Legal" asp-action="KVKK" class="text-decoration-none text-light">KVKK Aydınlatma Metni</a></li>
                 </ul>
             </div>
 

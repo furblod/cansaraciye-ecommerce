@@ -36,7 +36,17 @@
             </div>
 
             <button id="registerSubmit" type="submit" class="btn btn-primary w-100 mb-3">Kayıt Ol</button>
+            <div class="form-group form-check">
+                <input asp-for="Input.KVKKAccepted" class="form-check-input" />
+                <label class="form-check-label" asp-for="Input.KVKKAccepted">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#kvkkModal">KVKK Aydınlatma Metni’ni</a> okudum
+                    ve kabul ediyorum.
+                </label>
+                <span asp-validation-for="Input.KVKKAccepted" class="text-danger"></span>
+            </div>
         </form>
+
+
 
         @* Dış servislerle kayıt *@
         @if ((Model.ExternalLogins?.Count ?? 0) > 0)
@@ -58,6 +68,65 @@
         }
     </div>
 </div>
+<!-- KVKK Modal -->
+<div class="modal fade" id="kvkkModal" tabindex="-1" aria-labelledby="kvkkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content shadow rounded-4 border-0">
+            <div class="modal-header bg-dark text-white rounded-top-4">
+                <h5 class="modal-title fw-bold" id="kvkkModalLabel">KVKK Aydınlatma Metni</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body" style="max-height: 500px; overflow-y: auto; font-size: 0.95rem; line-height: 1.6;">
+                <h4 class="fw-bold">KVKK Aydınlatma Metni</h4>
+                @* “...” olan yerler firma bilgileri ile dolacak *@
+                <p>... olarak hizmet veren veri sorumlusu olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu
+                    (“KVKK”) uyarınca,
+                    kişisel verilerinizin güvenliğine önem veriyoruz.</p>
+
+                <h3>1. İşlenen Kişisel Veriler</h3>
+                <p>Tarafımızca aşağıdaki kişisel veriler işlenmektedir:</p>
+                <ul>
+                    <li>Ad ve Soyad</li>
+                    <li>E-posta adresi</li>
+                    <li>Telefon numarası</li>
+                    <li>Fiziksel adres</li>
+                </ul>
+
+                <h3>2. Kişisel Verilerin İşlenme Amaçları</h3>
+                <p>Kişisel verileriniz, yalnızca aşağıdaki amaçlarla işlenmektedir:</p>
+                <ul>
+                    <li>Siparişlerin alınması ve ürün gönderimi</li>
+                    <li>Müşteri ile iletişim kurulması</li>
+                </ul>
+
+                <h3>3. Kişisel Verilerin Aktarımı</h3>
+                <p>Kişisel verileriniz hiçbir şekilde üçüncü kişilerle paylaşılmamaktadır.</p>
+
+                <h3>4. Kişisel Verilerin Toplanma Yöntemi</h3>
+                <p>Veriler, kullanıcı kaydı ve sipariş işlemleri sırasında dijital ortamda otomatik yollarla
+                    toplanmaktadır.</p>
+
+                <h3>5. İlgili Kişinin Hakları</h3>
+                <p>KVKK’nın 11. maddesi uyarınca, her kullanıcı şu haklara sahiptir:</p>
+                <ul>
+                    <li>Kişisel verilerinin işlenip işlenmediğini öğrenme</li>
+                    <li>İşlenmişse buna ilişkin bilgi talep etme</li>
+                    <li>İşleme amacını ve bu amaca uygun kullanılıp kullanılmadığını öğrenme</li>
+                    <li>Yurt içinde veya yurt dışında aktarıldığı 3. kişileri bilme</li>
+                    <li>Eksik veya yanlış işlenmişse düzeltilmesini isteme</li>
+                    <li>Kanuna aykırı işlenmişse silinmesini veya yok edilmesini isteme</li>
+                </ul>
+
+                <p>Daha fazla bilgi için bizimle iletişime geçebilirsiniz: ...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

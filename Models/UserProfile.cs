@@ -24,7 +24,7 @@ namespace cansaraciye_ecommerce.Models
         public string Address { get; set; }
 
         public string PhoneNumber { get; set; }
-        public string City { get; set; }           // şehit
+        public string? City { get; set; }           // şehit
         public string? District { get; set; }       // İlçe
         public string? Neighborhood { get; set; }
         // Mahalle
@@ -32,5 +32,7 @@ namespace cansaraciye_ecommerce.Models
         // Sokak
         public string? BuildingNo { get; set; }     // Bina No
         public string? ApartmentNo { get; set; }    // Daire No
+        public DateTime? KVKKAcceptedAt { get; set; }
+
     }
 }

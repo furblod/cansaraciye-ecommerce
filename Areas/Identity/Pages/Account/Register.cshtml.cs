@@ -101,6 +101,10 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required(ErrorMessage = "KVKK Aydınlatma Metni'ni kabul etmelisiniz.")]
+            [Display(Name = "KVKK Onayı")]
+            public bool KVKKAccepted { get; set; }
+
         }
 
 
@@ -114,6 +118,11 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (!Input.KVKKAccepted)
+            {
+                ModelState.AddModelError("Input.KVKKAccepted", "KVKK Aydınlatma Metni'ni kabul etmelisiniz.");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -132,7 +141,8 @@ namespace cansaraciye_ecommerce.Areas.Identity.Pages.Account
                         FirstName = "",
                         LastName = "",
                         PhoneNumber = "",
-                        Address = "" // NULL hatasını engeller
+                        Address = "", // NULL hatasını engeller
+                        KVKKAcceptedAt = DateTime.Now
                     };
 
                     _context.UserProfiles.Add(userProfile);

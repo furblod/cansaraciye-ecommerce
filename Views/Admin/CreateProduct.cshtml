@@ -3,11 +3,13 @@
 @{
     ViewData["Title"] = "Yeni Ürün Ekle";
 }
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 <div class="container py-5">
     <div class="card shadow border-0 rounded-4">
         <div class="card-body px-4 py-5">
             <h3 class="fw-bold mb-4 text-center">🆕 Yeni Ürün Ekle</h3>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger text-center" })
 
             <form asp-controller="Admin" asp-action="CreateProduct" method="post" enctype="multipart/form-data">
 

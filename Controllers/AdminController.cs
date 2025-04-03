@@ -88,15 +88,31 @@ namespace cansaraciye_ecommerce.Controllers
 
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.Categories
+                .Include(c => c.Products)
+                    .ThenInclude(p => p.ProductImages)
+                .Include(c => c.Products)
+                    .ThenInclude(p => p.OrderItems)
+                .Include(c => c.Products)
+                    .ThenInclude(p => p.ShoppingCartItems)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
             if (category != null)
             {
+                foreach (var product in category.Products.ToList())
+                {
+                    _context.ProductImages.RemoveRange(product.ProductImages);
+                    _context.OrderItems.RemoveRange(product.OrderItems);
+                    _context.ShoppingCartItems.RemoveRange(product.ShoppingCartItems);
+                    _context.Products.Remove(product);
+                }
+
                 _context.Categories.Remove(category);
                 await _context.SaveChangesAsync();
             }
+
             return RedirectToAction("CategoryList");
         }
-
 
         public IActionResult ProductList()
         {
@@ -118,6 +134,9 @@ namespace cansaraciye_ecommerce.Controllers
                 if (product.Stock < 0)
                 {
                     ModelState.AddModelError("Stock", "Stok miktarı negatif olamaz.");
+
+                    // ❗ Hata durumunda dropdown tekrar yüklensin
+                    ViewBag.Categories = _context.Categories.ToList();
                     return View(product);
                 }
 
@@ -167,8 +186,10 @@ namespace cansaraciye_ecommerce.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.Categories = _context.Categories.ToList();
             return View(product);
         }
+
 
         public IActionResult EditProduct(int id)
         {
@@ -287,12 +308,29 @@ namespace cansaraciye_ecommerce.Controllers
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.OrderItems)
+                .Include(p => p.ShoppingCartItems)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (product != null)
             {
+                // Ürün görsellerini sil
+                _context.ProductImages.RemoveRange(product.ProductImages);
+
+                // Sipariş ürünlerini sil (Siparişin kendisini değil sadece ilişkili satırları)
+                _context.OrderItems.RemoveRange(product.OrderItems);
+
+                // Sepet ürünlerini sil
+                _context.ShoppingCartItems.RemoveRange(product.ShoppingCartItems);
+
+                // Ana ürünü sil
                 _context.Products.Remove(product);
+
                 await _context.SaveChangesAsync();
             }
+
             return RedirectToAction("ProductList");
         }
 

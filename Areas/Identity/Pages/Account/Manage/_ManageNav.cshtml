@@ -6,7 +6,7 @@
     var activePage = ViewData["ActivePage"] as string ?? "";
 }
 
-<ul class="nav flex-column nav-pills">
+<ul class="nav flex-column nav-pills sticky-box">
     <li class="nav-item mb-1">
         <a class="nav-link @(activePage == ManageNavPages.Index ? "active" : "text-dark")" asp-page="./Index">
             <i class="bi bi-person-circle me-1"></i> Profil
@@ -36,3 +36,10 @@
         </a>
     </li>
 </ul>
+<style>
+    .sticky-box {
+        position: sticky;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+        top: 50px;
+    }
+</style>

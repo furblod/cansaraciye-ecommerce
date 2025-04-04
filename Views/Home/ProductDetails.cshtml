@@ -1,86 +1,160 @@
 @model cansaraciye_ecommerce.Models.Product
 
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="row">
-        <!-- Ürün Resmi -->
-        <div class="col-md-6 text-center mb-4">
-            <img id="mainImage" src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded shadow"
-                style="max-height: 400px; object-fit: contain;">
-
-            <!-- Alt tarafta küçük görseller -->
-            @if (Model.ProductImages != null && Model.ProductImages.Any())
-            {
-                <div class="d-flex justify-content-center gap-2 mb-4">
-                    <img src="@Model.ImageUrl" class="img-thumbnail" style="width: 70px; height: 70px; cursor: pointer;"
-                        onclick="changeMainImage(this.src)" />
-
-                    @foreach (var image in Model.ProductImages)
-                    {
-                        <img src="@image.ImageUrl" class="img-thumbnail" style="width: 70px; height: 70px; cursor: pointer;"
-                            onclick="changeMainImage(this.src)" />
-                    }
+        <!-- SOL: Ürün Resimleri -->
+        <div class="col-md-7 order-2 order-md-1">
+            <div id="lightgallery" class="row g-3">
+                <!-- Ana Görsel -->
+                <div class="col-12">
+                    <a href="@Model.ImageUrl">
+                        <img src="@Model.ImageUrl" class="img-fluid w-100 rounded shadow main-product-image"
+                            alt="@Model.Name" />
+                    </a>
                 </div>
-            }
+
+                <!-- Ek Görseller (İkili Satırlı) -->
+                @if (Model.ProductImages != null && Model.ProductImages.Any())
+                {
+                    @for (int i = 0; i < Model.ProductImages.Count; i++)
+                    {
+                        <div class="col-6">
+                            <a href="@Model.ProductImages[i].ImageUrl">
+                                <img src="@Model.ProductImages[i].ImageUrl"
+                                    class="img-fluid w-100 rounded shadow-sm extra-product-image" alt="Ek Resim @i" />
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
         </div>
 
-        <!-- Ürün Bilgileri -->
-        <div class="col-md-6">
-            <h2 class="fw-bold">@Model.Name</h2>
-            <p class="text-muted">@Model.Category?.Name</p>
-            <h4 class="text-success fw-bold">@Model.Price.ToString("C")</h4>
-            <p>@Model.Description</p>
+        <!-- SAĞ: Ürün Bilgileri -->
+        <div class="col-md-5 order-1 order-md-2">
+            <div class="product-info">
+                <h2 class="fw-bold">@Model.Name</h2>
+                <p class="text-muted">@Model.Category?.Name</p>
+                <h4 class="text-success fw-bold">@Model.Price.ToString("C")</h4>
+                <p>@Model.Description</p>
 
-            <p>
-                <strong>Stok Durumu: </strong>
+                <p>
+                    <strong>Stok Durumu: </strong>
+                    @if (Model.Stock > 0)
+                    {
+                        <span class="badge bg-success">Stokta @Model.Stock adet Var</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Tükendi</span>
+                    }
+                </p>
+
                 @if (Model.Stock > 0)
                 {
-                    <span class="badge bg-success">Stokta Var</span>
+                    <form asp-controller="ShoppingCart" asp-action="AddToCart" method="get"
+                        class="d-flex align-items-center gap-3 mt-3">
+                        <input type="hidden" name="productId" value="@Model.Id" />
+
+                        <div class="input-group quantity-box" style="width: 140px;">
+                            <button type="button" class="btn btn-sm btn-outline-secondary"
+                                onclick="adjustQuantity(-1)">-</button>
+                            <input type="number" name="quantity" id="quantity-input" value="1" min="1"
+                                class="form-control text-center">
+                            <button type="button" class="btn btn-sm btn-outline-secondary"
+                                onclick="adjustQuantity(1)">+</button>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
+                            <i class="bi bi-cart-plus"></i> Sepete Ekle
+                        </button>
+                    </form>
                 }
-                else
-                {
-                    <span class="badge bg-danger">Tükendi</span>
-                }
-            </p>
 
-            @if (Model.Stock > 0)
-            {
-                <form asp-controller="ShoppingCart" asp-action="AddToCart" method="get"
-                    class="d-flex align-items-center gap-3 mt-3">
-                    <input type="hidden" name="productId" value="@Model.Id" />
-
-                    <div class="input-group quantity-box" style="width: 140px;">
-                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                            onclick="adjustQuantity(-1)">-</button>
-                        <input type="number" name="quantity" id="quantity-input" value="1" min="1"
-                            class="form-control text-center">
-                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                            onclick="adjustQuantity(1)">+</button>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
-                        <i class="bi bi-cart-plus"></i> Sepete Ekle
-                    </button>
-                </form>
-
-            }
-
-            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-4">← Geri Dön</a>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-4">← Geri Dön</a>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- ✅ + / - Butonlarını Kontrol Eden JS -->
+
+
+<!-- JS -->
 <script>
     function adjustQuantity(change) {
         const input = document.getElementById("quantity-input");
         let current = parseInt(input.value) || 1;
-
         current += change;
         if (current < 1) current = 1;
-
         input.value = current;
     }
-    function changeMainImage(src) {
-        document.getElementById("mainImage").src = src;
-    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        lightGallery(document.getElementById('lightgallery'), {
+            selector: 'a',
+            plugins: [lgZoom, lgThumbnail],
+            speed: 500,
+            hideBarsDelay: 0,
+            download: false,                 // İndirme butonu gizlenir
+            showZoomInOutIcons: false,
+            controls: true,
+            backdropDuration: 300,
+            allowMediaOverlap: true,        // İçerik arka plana taşar
+            appendSubHtmlTo: '.lg-item',    // Altyazı yerine içerik eklenmesini engeller
+        });
+    });
 </script>
+
+<!-- CSS -->
+<style>
+    .main-product-image,
+    .extra-product-image {
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+    }
+
+    .extra-product-image {
+        cursor: pointer;
+        transition: transform 0.3s;
+    }
+
+    .extra-product-image:hover {
+        transform: scale(1.05);
+    }
+
+    .product-info {
+        top: 100px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    }
+
+    /*  Arka plan transparan (simsiyah değil) */
+    .lg-backdrop {
+        background-color: rgba(0, 0, 0, 0.6) !important;
+    }
+
+    /*  Alt yazı/isim tamamen kaldırıldı */
+    .lg-sub-html {
+        display: none !important;
+    }
+
+    /*  Thumbnail görünümü sade */
+    .lg-thumb-outer {
+        padding: 10px 0;
+    }
+
+    /*  Thumbnail içi metinsiz olsun */
+    .lg-thumb-item .lg-thumb-caption {
+        display: none !important;
+    }
+</style>
+
+@* @media
+    (max-width: 768px) {
+        .sticky-box {
+            position: static;
+            top: auto;
+        }
+    } *@
+</style>

@@ -15,72 +15,73 @@
                         Hemen Alışverişe Başalyın.</a>
                 </div>
             }
-            <table class="table align-middle text-center">
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col">Görsel</th>
-                        <th scope="col">Ürün</th>
-                        <th scope="col">Adet</th>
-                        <th scope="col">Fiyat</th>
-                        <th scope="col">Durum</th>
-                        <th scope="col">Sil</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        decimal totalPrice = 0;
-                    }
-                    @foreach (var item in Model)
-                    {
-                        var itemTotal = item.Product.Price * item.Quantity;
-                        totalPrice += itemTotal;
+            <div class="table-responsive">
+                <table class="table align-middle text-center">
+                    <thead class="table-light">
                         <tr>
-                            <td>
-                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })">
-                                    <img src="@item.Product.ImageUrl" alt="@item.Product.Name" width="60" height="60"
-                                        style="object-fit: cover; border-radius: 0.5rem;" />
-                                </a>
-                            </td>
-                            <td class="fw-medium">
-                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })"
-                                    class="text-decoration-none" style="color: black;">@item.Product.Name</a>
-                            </td>
-                            <td>
-                                <div class="d-flex justify-content-center align-items-center gap-2">
-                                    <button class="btn btn-sm btn-outline-secondary px-2"
-                                        onclick="updateCartQuantity(@item.Id, -1)">-</button>
-
-                                    <input type="number" id="cart-quantity-@item.Id" value="@item.Quantity" min="1"
-                                        class="form-control text-center" style="width: 55px; height: 38px;"
-                                        onchange="updateCartQuantity(@item.Id, 0)" />
-
-                                    <button class="btn btn-sm btn-outline-secondary px-2"
-                                        onclick="updateCartQuantity(@item.Id, 1)">+</button>
-                                </div>
-                            </td>
-                            <td class="fw-semibold">@itemTotal.ToString("C")</td>
-                            <td>
-                                @if (item.Quantity > item.Product.Stock)
-                                {
-                                    <span class="text-danger small">
-                                        Stok yetersiz! Maksimum: @item.Product.Stock adet.
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span class="text-success small">Stokta mevcut</span>
-                                }
-                            </td>
-                            <td>
-                                <form asp-action="RemoveFromCart" asp-route-cartItemId="@item.Id" method="post">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Sil</button>
-                                </form>
-                            </td>
+                            <th scope="col">Görsel</th>
+                            <th scope="col">Ürün</th>
+                            <th scope="col">Adet</th>
+                            <th scope="col">Fiyat</th>
+                            <th scope="col">Durum</th>
+                            <th scope="col">Sil</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @{
+                            decimal totalPrice = 0;
+                        }
+                        @foreach (var item in Model)
+                        {
+                            var itemTotal = item.Product.Price * item.Quantity;
+                            totalPrice += itemTotal;
+                            <tr>
+                                <td>
+                                    <a href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })">
+                                        <img src="@item.Product.ImageUrl" alt="@item.Product.Name" width="60" height="60"
+                                            style="object-fit: cover; border-radius: 0.5rem;" />
+                                    </a>
+                                </td>
+                                <td class="fw-medium">
+                                    <a href="@Url.Action("ProductDetails", "Home", new { id = item.Product.Id })"
+                                        class="text-decoration-none" style="color: black;">@item.Product.Name</a>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <button class="btn btn-sm btn-outline-secondary px-2"
+                                            onclick="updateCartQuantity(@item.Id, -1)">-</button>
 
+                                        <input type="number" id="cart-quantity-@item.Id" value="@item.Quantity" min="1"
+                                            class="form-control text-center" style="width: 55px; height: 38px;"
+                                            onchange="updateCartQuantity(@item.Id, 0)" />
+
+                                        <button class="btn btn-sm btn-outline-secondary px-2"
+                                            onclick="updateCartQuantity(@item.Id, 1)">+</button>
+                                    </div>
+                                </td>
+                                <td class="fw-semibold">@itemTotal.ToString("C")</td>
+                                <td>
+                                    @if (item.Quantity > item.Product.Stock)
+                                    {
+                                        <span class="text-danger small">
+                                            Stok yetersiz! Maksimum: @item.Product.Stock adet.
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success small">Stokta mevcut</span>
+                                    }
+                                </td>
+                                <td>
+                                    <form asp-action="RemoveFromCart" asp-route-cartItemId="@item.Id" method="post">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Sil</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
             <div class="d-flex justify-content-end align-items-center mb-3">
                 <h5 class="mb-0">Toplam: <span class="text-dark fw-bold">@totalPrice.ToString("C")</span></h5>
             </div>

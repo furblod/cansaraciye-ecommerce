@@ -337,8 +337,7 @@ namespace cansaraciye_ecommerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .IsRequired()
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -356,6 +355,9 @@ namespace cansaraciye_ecommerce.Migrations
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
+
+                    b.Property<string>("VideoUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -525,7 +527,7 @@ namespace cansaraciye_ecommerce.Migrations
                         .IsRequired();
 
                     b.HasOne("cansaraciye_ecommerce.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -558,7 +560,7 @@ namespace cansaraciye_ecommerce.Migrations
             modelBuilder.Entity("cansaraciye_ecommerce.Models.ShoppingCartItem", b =>
                 {
                     b.HasOne("cansaraciye_ecommerce.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ShoppingCartItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -589,7 +591,11 @@ namespace cansaraciye_ecommerce.Migrations
 
             modelBuilder.Entity("cansaraciye_ecommerce.Models.Product", b =>
                 {
+                    b.Navigation("OrderItems");
+
                     b.Navigation("ProductImages");
+
+                    b.Navigation("ShoppingCartItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -127,20 +127,18 @@ namespace cansaraciye_ecommerce.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product, IFormFile MainImage, List<IFormFile> ExtraImages)
+        public async Task<IActionResult> CreateProduct(Product product, IFormFile MainImage, List<IFormFile> ExtraImages, IFormFile ProductVideo)
         {
             if (ModelState.IsValid)
             {
                 if (product.Stock < 0)
                 {
                     ModelState.AddModelError("Stock", "Stok miktarı negatif olamaz.");
-
-                    // ❗ Hata durumunda dropdown tekrar yüklensin
                     ViewBag.Categories = _context.Categories.ToList();
                     return View(product);
                 }
 
-                // Ana görseli yükle
+                // 1️⃣ Ana görseli yükle
                 if (MainImage != null && MainImage.Length > 0)
                 {
                     var fileName = Guid.NewGuid() + Path.GetExtension(MainImage.FileName);
@@ -154,11 +152,25 @@ namespace cansaraciye_ecommerce.Controllers
                     product.ImageUrl = "/images/" + fileName;
                 }
 
-                // Ürünü önce kaydet (Id üretilecek)
+                // 2️⃣ Video dosyasını yükle
+                if (ProductVideo != null && ProductVideo.Length > 0)
+                {
+                    var videoFileName = Guid.NewGuid() + Path.GetExtension(ProductVideo.FileName);
+                    var videoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/videos", videoFileName);
+
+                    using (var videoStream = new FileStream(videoPath, FileMode.Create))
+                    {
+                        await ProductVideo.CopyToAsync(videoStream);
+                    }
+
+                    product.VideoUrl = "/videos/" + videoFileName;
+                }
+
+                // 3️⃣ Ürünü kaydet
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
 
-                // Çoklu görselleri yükle
+                // 4️⃣ Ekstra görselleri yükle
                 if (ExtraImages != null && ExtraImages.Any())
                 {
                     foreach (var image in ExtraImages)
@@ -207,7 +219,7 @@ namespace cansaraciye_ecommerce.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> EditProduct(int id, IFormFile MainImage, List<IFormFile> ExtraImages, string Name, string Description, decimal Price, int Stock, int CategoryId)
+        public async Task<IActionResult> EditProduct(int id, IFormFile MainImage, List<IFormFile> ExtraImages, IFormFile ProductVideo, string Name, string Description, decimal Price, int Stock, int CategoryId)
         {
             var existingProduct = await _context.Products
                 .Include(p => p.ProductImages)
@@ -216,39 +228,42 @@ namespace cansaraciye_ecommerce.Controllers
             if (existingProduct == null)
                 return NotFound();
 
-            // Ana verileri güncelle
+            // Temel verileri güncelle
             existingProduct.Name = Name;
             existingProduct.Description = Description;
             existingProduct.Price = Price;
             existingProduct.Stock = Stock;
             existingProduct.CategoryId = CategoryId;
 
-            // Ana görsel yükle (varsa)
+            // Ana görsel güncelle
             if (MainImage != null && MainImage.Length > 0)
             {
                 var fileName = Guid.NewGuid() + Path.GetExtension(MainImage.FileName);
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await MainImage.CopyToAsync(stream);
-                }
-
+                using var stream = new FileStream(path, FileMode.Create);
+                await MainImage.CopyToAsync(stream);
                 existingProduct.ImageUrl = "/images/" + fileName;
             }
 
-            // Ekstra görselleri yükle
+            // Yeni video dosyası güncelle
+            if (ProductVideo != null && ProductVideo.Length > 0)
+            {
+                var videoFileName = Guid.NewGuid() + Path.GetExtension(ProductVideo.FileName);
+                var videoPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/videos", videoFileName);
+                using var stream = new FileStream(videoPath, FileMode.Create);
+                await ProductVideo.CopyToAsync(stream);
+                existingProduct.VideoUrl = "/videos/" + videoFileName;
+            }
+
+            // Yeni ek görseller
             if (ExtraImages != null && ExtraImages.Any())
             {
                 foreach (var image in ExtraImages)
                 {
                     var fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await image.CopyToAsync(stream);
-                    }
+                    using var stream = new FileStream(path, FileMode.Create);
+                    await image.CopyToAsync(stream);
 
                     _context.ProductImages.Add(new ProductImage
                     {
@@ -261,6 +276,26 @@ namespace cansaraciye_ecommerce.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("ProductList");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteProductVideo(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null || string.IsNullOrEmpty(product.VideoUrl))
+                return NotFound();
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", product.VideoUrl.TrimStart('/'));
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+
+            product.VideoUrl = null;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("EditProduct", new { id = productId });
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> DeleteProductImage(int id)

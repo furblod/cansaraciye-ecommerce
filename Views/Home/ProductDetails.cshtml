@@ -5,17 +5,26 @@
         <!-- SOL: Ürün Resimleri -->
         <div class="col-md-7 order-2 order-md-1">
             <div id="lightgallery" class="row g-3">
-                <!-- Ana Görsel -->
-                <div class="col-12">
-                    <a href="@Model.ImageUrl">
-                        <img src="@Model.ImageUrl" class="img-fluid w-100 rounded shadow main-product-image"
-                            alt="@Model.Name" />
-                    </a>
-                </div>
-
+                <!-- Ürün Tanıtım Videosu -->
+                @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                {
+                    <div class="col-12 mb-3">
+                        <video class="w-100 rounded shadow video-box" controls>
+                            <source src="@Model.VideoUrl" type="video/mp4" />
+                            Tarayıcınız video etiketini desteklemiyor.
+                        </video>
+                    </div>
+                }
                 <!-- Ek Görseller (İkili Satırlı) -->
                 @if (Model.ProductImages != null && Model.ProductImages.Any())
                 {
+                    <!-- Ana Görsel -->
+                    <div class="col-6">
+                        <a href="@Model.ImageUrl">
+                            <img src="@Model.ImageUrl" class="img-fluid w-100 rounded shadow-sm extra-product-image"
+                                alt="@Model.Name" />
+                        </a>
+                    </div>
                     @for (int i = 0; i < Model.ProductImages.Count; i++)
                     {
                         <div class="col-6">

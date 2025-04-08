@@ -85,15 +85,15 @@
                 </li> *@
                 <li class="nav-item">
                     <a class="nav-link position-relative" asp-controller="ShoppingCart" asp-action="Index">
-    <i class="bi bi-cart-fill"></i> Sepetim
-    @await Html.PartialAsync("_CartCountPartial")
-</a>
+                        <i class="bi bi-cart-fill"></i> Sepetim
+                        @await Html.PartialAsync("_CartCountPartial")
+                    </a>
 
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" role="button" data-bs-toggle="collapse" href="#filterPanel"
                        aria-expanded="false" aria-controls="filterPanel">
-                        <i class="bi bi-funnel-fill"></i> Filtrele
+                        <i class="bi bi-funnel-fill"></i> Ürün Ara
                     </a>
                 </li>
                 @if (User.Identity.IsAuthenticated)

@@ -19,6 +19,7 @@ namespace cansaraciye_ecommerce.Models
         public int Stock { get; set; }
 
         public string? ImageUrl { get; set; }
+        public string? VideoUrl { get; set; }
 
         [Required(ErrorMessage = "Kategori seçilmelidir.")]
         [ForeignKey("Category")]

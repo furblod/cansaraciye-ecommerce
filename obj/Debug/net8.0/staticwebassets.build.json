@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "/ln8BFFlQdajMNUjS9OKZ36f+QBOVtMeLeyfQeoGfY8=",
+  "Hash": "mUc2WYhwsO7BgZutV86qV9XiQ/sXCYhMBsb+fzNgcoo=",
   "Source": "cansaraciye-ecommerce",
   "BasePath": "_content/cansaraciye-ecommerce",
   "Mode": "Default",
@@ -1309,6 +1309,25 @@
       "OriginalItemSpec": "wwwroot\\images\\12a0061e-7bb6-499b-81de-e836176a688a.jpg"
     },
     {
+      "Identity": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\1e65790e-b5c6-4988-812d-b8a76726d794.jpg",
+      "SourceId": "cansaraciye-ecommerce",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\",
+      "BasePath": "_content/cansaraciye-ecommerce",
+      "RelativePath": "images/1e65790e-b5c6-4988-812d-b8a76726d794.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\1e65790e-b5c6-4988-812d-b8a76726d794.jpg"
+    },
+    {
       "Identity": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\3043802d-7f75-47a0-b349-c326747045ce.jpg",
       "SourceId": "cansaraciye-ecommerce",
       "SourceType": "Discovered",
@@ -1423,6 +1442,25 @@
       "OriginalItemSpec": "wwwroot\\images\\77d7698a-6216-4f02-bec9-1c2f24f55f5a.jpg"
     },
     {
+      "Identity": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\7c78c38f-0479-4a3d-a7e3-e5b4981b49d0.jpg",
+      "SourceId": "cansaraciye-ecommerce",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\",
+      "BasePath": "_content/cansaraciye-ecommerce",
+      "RelativePath": "images/7c78c38f-0479-4a3d-a7e3-e5b4981b49d0.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\7c78c38f-0479-4a3d-a7e3-e5b4981b49d0.jpg"
+    },
+    {
       "Identity": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\836513a1-5ea1-43ca-9cc1-282a2961e350.jpg",
       "SourceId": "cansaraciye-ecommerce",
       "SourceType": "Discovered",
@@ -1459,6 +1497,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\84d69402-eb85-433e-a4a7-83fe215ba949.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\8731f201-6cc6-4fc7-a67d-8512a468980d.jpg",
+      "SourceId": "cansaraciye-ecommerce",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\",
+      "BasePath": "_content/cansaraciye-ecommerce",
+      "RelativePath": "images/8731f201-6cc6-4fc7-a67d-8512a468980d.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\8731f201-6cc6-4fc7-a67d-8512a468980d.jpg"
     },
     {
       "Identity": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\images\\9d8a0cf0-c6e8-4100-be2c-ea15f8777dc5.jpg",
@@ -3017,6 +3074,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\videos\\1e3fbf4b-b28e-42a2-8ffc-5fc3f84c2d25.mp4",
+      "SourceId": "cansaraciye-ecommerce",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\furka\\cansaraciye-ecommerce\\wwwroot\\",
+      "BasePath": "_content/cansaraciye-ecommerce",
+      "RelativePath": "videos/1e3fbf4b-b28e-42a2-8ffc-5fc3f84c2d25.mp4",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\videos\\1e3fbf4b-b28e-42a2-8ffc-5fc3f84c2d25.mp4"
     }
   ]
 }

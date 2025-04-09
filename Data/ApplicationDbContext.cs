@@ -20,8 +20,7 @@ namespace cansaraciye_ecommerce.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
-
-
+        public DbSet<WholesaleRequest> WholesaleRequests { get; set; }
     }
 }
 

@@ -1,0 +1,50 @@
+@model List<cansaraciye_ecommerce.Models.WholesaleRequest>
+@{
+    ViewData["Title"] = "Toptan Alışveriş Talepleri";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Toptan Alışveriş Talepleri</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Şu anda kayıtlı bir toptan alışveriş talebi bulunmamaktadır.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped align-middle">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>#</th>
+                        <th>Ad Soyad</th>
+                        <th>İşletme</th>
+                        <th>E-posta</th>
+                        <th>Telefon</th>
+                        <th>Ürün Bilgisi</th>
+                        <th>Adet</th>
+                        <th>İletişim Tercihi</th>
+                        <th>Tarih</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        var r = Model[i];
+                        <tr>
+                            <td class="text-center">@(@i + 1)</td>
+                            <td>@r.FullName</td>
+                            <td>@r.CompanyName</td>
+                            <td><a href="mailto:@r.Email">@r.Email</a></td>
+                            <td><a href="tel:@r.PhoneNumber">@r.PhoneNumber</a></td>
+                            <td>@r.RequestDetails</td>
+                            <td class="text-center">@r.EstimatedQuantity</td>
+                            <td>@r.PreferredContactMethod</td>
+                            <td>@r.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

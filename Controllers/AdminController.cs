@@ -484,5 +484,15 @@ namespace cansaraciye_ecommerce.Controllers
                 return RedirectToAction("Orders");
             }
         }
+        [Authorize(Roles = "Admin")]
+        public IActionResult WholesaleRequests()
+        {
+            var requests = _context.WholesaleRequests
+                .OrderByDescending(r => r.CreatedAt)
+                .ToList();
+            return View(requests);
+        }
+
+
     }
 }

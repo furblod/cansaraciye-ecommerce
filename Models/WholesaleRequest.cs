@@ -38,6 +38,8 @@ namespace cansaraciye_ecommerce.Models
         [Required]
         [Display(Name = "Ürün Bilgisi veya Özel İstek")]
         public string RequestDetails { get; set; }
+        public int? SelectedProductId { get; set; } // dropdown seçimi (isteğe bağlı)
+
 
         [Display(Name = "Tahmini Adet")]
         public int? EstimatedQuantity { get; set; }

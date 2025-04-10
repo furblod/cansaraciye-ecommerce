@@ -1,4 +1,6 @@
+@using cansaraciye_ecommerce.Models
 @model cansaraciye_ecommerce.Models.WholesaleRequest
+
 @{
     ViewData["Title"] = "Toptan Alışveriş Talebi";
 }
@@ -21,7 +23,6 @@
                 <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
             }
 
-
             <form asp-action="SubmitRequest" method="post" class="bg-light p-4 rounded shadow-sm">
                 <div class="mb-3">
                     <label asp-for="FullName" class="form-label"></label>
@@ -43,7 +44,55 @@
                     <input asp-for="CompanyName" class="form-control" />
                 </div>
 
-                <div class="mb-3">
+                <!--  Ürün Seçim Butonu -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="toggleProductArea" />
+                    <label class="form-check-label" for="toggleProductArea">
+                        Mevcut ürünlerden seçim yapmak istiyorum
+                    </label>
+                </div>
+
+                <!--  Ürün Seçim Alanı -->
+                <div id="productSelectionArea">
+                    <!-- 🔍 Arama ve Kategori -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-8">
+                            <input type="text" id="productSearch" class="form-control" placeholder="Ürün adına göre filtrele..." />
+                        </div>
+                        <div class="col-md-4">
+                            <select id="categoryFilter" class="form-select">
+                                <option value="">Tüm Kategoriler</option>
+                                @foreach (var cat in ViewBag.Categories as List<Category>)
+                                {
+                                    <option value="@cat.Name.ToLower()">@cat.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Ürün Kartları -->
+                    <div class="row row-cols-1 row-cols-md-3 g-3" id="productList">
+                        @foreach (var product in ViewBag.Products as List<Product>)
+                        {
+                            var inputId = $"product_{product.Id}";
+                            <div class="col product-item" data-category="@product.Category?.Name?.ToLower()">
+                                <label for="@inputId" class="card h-100 shadow-sm border @(Model?.SelectedProductId == product.Id ? "border-success" : "")" style="cursor: pointer;">
+                                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">@product.Name</h5>
+                                        <span class="badge bg-secondary">@product.Category?.Name</span>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="SelectedProductId" id="@inputId" value="@product.Id"
+                                                @(Model?.SelectedProductId == product.Id ? "checked" : "") />
+                                            <label class="form-check-label">Bu ürünü seç</label>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="mb-3 mt-4">
                     <label asp-for="RequestDetails" class="form-label"></label>
                     <textarea asp-for="RequestDetails" class="form-control" rows="4"></textarea>
                 </div>
@@ -68,3 +117,53 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    const toggleCheckbox = document.getElementById("toggleProductArea");
+    const productArea = document.getElementById("productSelectionArea");
+    const searchInput = document.getElementById("productSearch");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    toggleCheckbox.addEventListener("change", function () {
+        if (this.checked) {
+            productArea.classList.add("active");
+            productArea.scrollIntoView({ behavior: "smooth" });
+        } else {
+            productArea.classList.remove("active");
+        }
+    });
+
+    function filterProducts() {
+        const keyword = searchInput.value.toLowerCase();
+        const selectedCategory = categoryFilter.value;
+
+        document.querySelectorAll(".product-item").forEach(function (item) {
+            const title = item.querySelector(".card-title").innerText.toLowerCase();
+            const itemCategory = item.getAttribute("data-category");
+
+            const matchTitle = title.includes(keyword);
+            const matchCategory = !selectedCategory || itemCategory === selectedCategory;
+
+            item.style.display = (matchTitle && matchCategory) ? "block" : "none";
+        });
+    }
+
+    searchInput.addEventListener("input", filterProducts);
+    categoryFilter.addEventListener("change", filterProducts);
+</script>
+}
+
+<style>
+    #productSelectionArea {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.6s ease, opacity 0.6s ease;
+    }
+
+    #productSelectionArea.active {
+        max-height: 3000px;
+        opacity: 1;
+    }
+</style>

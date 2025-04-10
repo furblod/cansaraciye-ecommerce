@@ -20,7 +20,9 @@ public class WholesaleController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        ViewBag.Products = _context.Products.Include(p => p.Category).ToList();
+        ViewBag.Categories = _context.Categories.ToList();
+        return View(new WholesaleRequest());
     }
 
     [HttpPost]
@@ -38,6 +40,7 @@ public class WholesaleController : Controller
             foreach (var e in ModelState.Values.SelectMany(v => v.Errors))
                 Console.WriteLine($"🔴 {e.ErrorMessage}");
 
+            ViewBag.Products = _context.Products.ToList();
             return View("Index", model);
         }
 
@@ -47,4 +50,10 @@ public class WholesaleController : Controller
         TempData["Success"] = "Talebiniz başarıyla iletildi. En kısa sürede sizinle iletişime geçilecektir.";
         return RedirectToAction("Index");
     }
+    public IActionResult CustomRequest()
+    {
+        ViewBag.Products = _context.Products.ToList();
+        return View();
+    }
+
 }

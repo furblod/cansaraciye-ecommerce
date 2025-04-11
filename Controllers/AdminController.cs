@@ -484,15 +484,40 @@ namespace cansaraciye_ecommerce.Controllers
                 return RedirectToAction("Orders");
             }
         }
-        [Authorize(Roles = "Admin")]
         public IActionResult WholesaleRequests()
         {
             var requests = _context.WholesaleRequests
+                .Include(r => r.User)
+                .Include(r => r.SelectedProduct != null ? r.SelectedProduct : null)
                 .OrderByDescending(r => r.CreatedAt)
                 .ToList();
+
             return View(requests);
         }
+        public IActionResult WholesaleRequestDetails(int id)
+        {
+            var request = _context.WholesaleRequests
+                .Include(r => r.SelectedProduct)
+                .Include(r => r.User)
+                .FirstOrDefault(r => r.Id == id);
 
 
+            if (request == null)
+                return NotFound();
+
+            return View(request);
+        }
+
+        public IActionResult DeleteWholesaleRequest(int id)
+        {
+            var request = _context.WholesaleRequests.Find(id);
+            if (request == null)
+                return NotFound();
+
+            _context.WholesaleRequests.Remove(request);
+            _context.SaveChanges();
+
+            return RedirectToAction("WholesaleRequests");
+        }
     }
 }

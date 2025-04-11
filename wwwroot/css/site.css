@@ -159,3 +159,20 @@ input[type=number] {
   overflow: hidden;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
 }
+
+@media (max-width: 576px) {
+  .slider-title {
+    font-size: 0.75rem;
+    /* başlık daha küçük */
+  }
+
+  .slider-text {
+    font-size: 0.5rem;
+    /* açıklama daha küçük */
+  }
+
+  .carousel-caption {
+    padding: 0.5rem !important;
+    /* daha az padding */
+  }
+}

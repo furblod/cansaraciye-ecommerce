@@ -21,10 +21,8 @@
                         <th>İşletme</th>
                         <th>E-posta</th>
                         <th>Telefon</th>
-                        <th>Ürün Bilgisi</th>
-                        <th>Adet</th>
-                        <th>İletişim Tercihi</th>
                         <th>Tarih</th>
+                        <th>İşlemler</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,10 +35,13 @@
                             <td>@r.CompanyName</td>
                             <td><a href="mailto:@r.Email">@r.Email</a></td>
                             <td><a href="tel:@r.PhoneNumber">@r.PhoneNumber</a></td>
-                            <td>@r.RequestDetails</td>
-                            <td class="text-center">@r.EstimatedQuantity</td>
-                            <td>@r.PreferredContactMethod</td>
                             <td>@r.CreatedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td class="text-center">
+                                <a asp-action="WholesaleRequestDetails" asp-route-id="@r.Id"
+                                    class="btn btn-sm btn-info me-1">Detayları Gör</a>
+                                <a asp-action="DeleteWholesaleRequest" asp-route-id="@r.Id" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('Silmek istediğinize emin misiniz?')">Sil</a>
+                            </td>
                         </tr>
                     }
                 </tbody>

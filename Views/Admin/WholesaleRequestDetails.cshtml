@@ -1,0 +1,65 @@
+@model cansaraciye_ecommerce.Models.WholesaleRequest
+
+@{
+    ViewData["Title"] = "Toptan Talep Detayı";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Toptan Talep Detayı</h2>
+
+    <div class="card p-4 shadow-sm">
+        <dl class="row">
+            <dt class="col-sm-4">Kullanıcı Hesabı (E-posta):</dt>
+            <dd class="col-sm-8">
+                @if (Model.User != null)
+                {
+                    <a href="mailto:@Model.User.Email">@Model.User.Email</a>
+                }
+                else
+                {
+                    <em>Kullanıcı bilgisi yok</em>
+                }
+            </dd>
+
+            <dt class="col-sm-4">Ad Soyad:</dt>
+            <dd class="col-sm-8">@Model.FullName</dd>
+
+            <dt class="col-sm-4">E-posta:</dt>
+            <dd class="col-sm-8"><a href="mailto:@Model.Email">@Model.Email</a></dd>
+
+            <dt class="col-sm-4">Telefon Numarası:</dt>
+            <dd class="col-sm-8"><a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a></dd>
+
+            <dt class="col-sm-4">İşletme Adı:</dt>
+            <dd class="col-sm-8">@Model.CompanyName</dd>
+
+            <dt class="col-sm-4">Seçilen Ürün:</dt>
+            <dd class="col-sm-8">
+                @if (Model.SelectedProductId != null)
+                {
+                    <strong>@Model.SelectedProduct.Name</strong>
+                    <br />
+                    <img src="@Model.SelectedProduct.ImageUrl" style="max-width:150px;" />
+                }
+                else
+                {
+                    <em>Ürün seçilmemiş</em>
+                }
+            </dd>
+
+            <dt class="col-sm-4">Ürün Bilgisi veya Özel İstek:</dt>
+            <dd class="col-sm-8">@Model.RequestDetails</dd>
+
+            <dt class="col-sm-4">Tahmini Adet:</dt>
+            <dd class="col-sm-8">@Model.EstimatedQuantity</dd>
+
+            <dt class="col-sm-4">İletişim Tercihi:</dt>
+            <dd class="col-sm-8">@Model.PreferredContactMethod</dd>
+
+            <dt class="col-sm-4">Talep Tarihi:</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+        </dl>
+
+        <a href="@Url.Action("WholesaleRequests")" class="btn btn-secondary mt-3">Geri Dön</a>
+    </div>
+</div>

@@ -36,13 +36,11 @@ public class WholesaleController : Controller
 
         if (!ModelState.IsValid)
         {
-            Console.WriteLine("ModelState geçersiz:");
-            foreach (var e in ModelState.Values.SelectMany(v => v.Errors))
-                Console.WriteLine($"🔴 {e.ErrorMessage}");
-
-            ViewBag.Products = _context.Products.ToList();
+            ViewBag.Products = _context.Products.Include(p => p.Category).ToList();
+            ViewBag.Categories = _context.Categories.ToList();
             return View("Index", model);
         }
+
 
         _context.WholesaleRequests.Add(model);
         await _context.SaveChangesAsync();

@@ -47,23 +47,23 @@
     <div class="carousel-inner rounded-4 shadow">
         <div class="carousel-item active">
             <img src="/images/slider1.jpg" class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-3 p-3">
-                <h5>Kendi Üretimimiz</h5>
-                <p>Kalite ve dayanıklılık, üreticiden doğrudan size.</p>
+            <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 p-2">
+                <h5 class="slider-title">Kendi Üretimimiz</h5>
+                <p class="slider-text">Kalite ve dayanıklılık, üreticiden doğrudan size.</p>
             </div>
         </div>
         <div class="carousel-item">
             <img src="/images/slider2.jpg" class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-3 p-3">
-                <h5>Toptan Satış</h5>
-                <p>Bayilere özel fırsatlarla toptan alışverişin keyfini çıkarın.</p>
+            <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 p-3">
+                <h5 class="slider-title">Toptan Satış</h5>
+                <p class="slider-text">Bayilere özel fırsatlarla toptan alışverişin keyfini çıkarın.</p>
             </div>
         </div>
         <div class="carousel-item">
             <img src="/images/slider3.jpg" class="d-block w-100" alt="...">
-            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-3 p-3">
-                <h5>Perakende Mağazamız</h5>
-                <p>Uygun fiyatlarla perakende alışveriş imkanı.</p>
+            <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 p-3">
+                <h5 class="slider-title">Perakende Mağazamız</h5>
+                <p class="slider-text">Uygun fiyatlarla perakende alışveriş imkanı.</p>
             </div>
         </div>
     </div>
@@ -98,7 +98,7 @@
                         <div class="mt-auto">
                             @if (product.Stock > 0)
                             {
-                                <div class="d-flex justify-content-between align-items-center">
+                                @* <div class="d-flex justify-content-between align-items-center">
                                     <button class="btn btn-dark me-2 flex-grow-1" onclick="addToCart(@product.Id)">
                                         <i class="bi bi-cart-plus"></i> Sepete Ekle
                                     </button>
@@ -111,7 +111,7 @@
                                         <button class="btn btn-outline-secondary py-1 px-2" style="height: 38px;"
                                             onclick="increaseQuantity(@product.Id)">+</button>
                                     </div>
-                                </div>
+                                </div> *@
                             }
                             else
                             {

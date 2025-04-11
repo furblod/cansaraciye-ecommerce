@@ -40,6 +40,9 @@ namespace cansaraciye_ecommerce.Models
         public string RequestDetails { get; set; }
         public int? SelectedProductId { get; set; } // dropdown seçimi (isteğe bağlı)
 
+        [ForeignKey("SelectedProductId")]
+        public Product? SelectedProduct { get; set; }
+
 
         [Display(Name = "Tahmini Adet")]
         public int? EstimatedQuantity { get; set; }

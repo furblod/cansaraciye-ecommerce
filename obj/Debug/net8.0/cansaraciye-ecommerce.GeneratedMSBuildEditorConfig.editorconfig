@@ -226,6 +226,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUHJvZHVjdExpc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/furka/cansaraciye-ecommerce/Views/Admin/WholesaleRequestDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cV2hvbGVzYWxlUmVxdWVzdERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/furka/cansaraciye-ecommerce/Views/Admin/WholesaleRequests.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cV2hvbGVzYWxlUmVxdWVzdHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
